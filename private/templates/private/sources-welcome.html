@@ -1,0 +1,14 @@
+{% extends 'private/source-base.html' %}
+
+{% block innercontent %}
+
+	<h1>Source Views</h1>
+	<p>Welcome to the <em>Sources</em> section!</p>
+	<p>Select a source on the sidebar (to the left) to view and edit its information, incl. events, epochs, and relationships.</p>
+	<p>People are at the center of data structure, so for instance &mdash; a person must exist in the database before you can create Events, Epochs and/or Research Items related to that person; two people must already exist in the database before you can define a relationship between them; a source must exist in the database before it can be assigned as an attribute of a Person, Event, Epoch, or Relationship.</p>
+	<h2>Add a Source</h2>
+	<p>When a Source is not already defined, you can add it to the data base by clicking 'Add a Person' below.</p>
+	<p>(Move to the add a source form) A source can be listed as <i>private</i>, by ticking the "Src is Private" box. Only you can see the sources you list as private, until you decide to unmark them as private, or until your entry in the Person database is marked as deceased.</p>
+	<a href="{% url 'source-add' %}"><button>Add a Source</button></a>
+
+{% endblock %}

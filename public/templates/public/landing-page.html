@@ -1,0 +1,39 @@
+{% extends 'public/base.html' %}
+
+{% block content %}
+ 
+	<div class="col-lg-1 col-md-12"></div>
+	<div class="col-lg-10 col-md-12">
+		<h1>Open Ancestry Web</h1>
+		<p>Open Ancestry Web is a fully customizable template for creating a website to collaborate on genealogy research with family members and others. It is an open-source Django-based project.</p>
+
+		<p>Don't appreciate the big ancestry websites' business model? Want to be in control of the fruits of your own labor, private sources and family photos?</p>
+
+		<p>Get a copy of Open Ancestry Web from <a href="https://github.com/BobBorges/open-ancestry-web">Github</a> and run it on your own webserver.</p>
+
+
+		<h3>Quick Start</h3>
+		<p>
+			<ol>
+				<li>Clone the <a href="https://github.com/BobBorges/open-ancestry-web">Github Repo</a>.</li>
+				<li>Set up an environment by running `initialize.sh`, then run python dev server or navigate to the site's URL.</li>
+				<li>Create yourself a user in the Django Shell and asign it superuser status</li>
+				<li>Log in to to the admin panel and add at least one person and one source</li>
+				<li>Navigate to the public facing site and start exploring. Add more people / sources, define relationships, events, epochs, etc...</li>
+			</ol>
+		</p>
+
+
+		<hr>
+		<h3>This instance</h3>
+
+		<p>This instance of Open Ancestry Web, hosted at <i>{{ domain }}</i> contains a project initiated by <i>{{ project_initiator }}</i>.</p>
+
+		<br><br>
+		<h4><b><u>Instance Details</u></b></h4>
+		
+		<p>{{ instance_details|linebreaks }}</p>
+	</div>
+	<div class="col-lg-1 col-md-12"></div>
+
+{% endblock %}

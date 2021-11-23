@@ -1,0 +1,72 @@
+{% extends 'private/epochs-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block innercontent %}
+	<h1>{{ targetEP.epoch_title }}</h1>
+		<p>
+			<span class="inlbl">
+				From 
+				{% if targetEP.start_date_approximate %}
+				c.a.
+				{% endif %}
+				{% if targetEP.start_date %}
+				{{ targetEP.start_date }}
+				{% else %}
+				<i>unknown</i>
+				{% endif %}
+				to
+				{% if targetEP.end_date_approximate %}
+				c.a.
+				{% endif %}
+				{% if targetEP.end_date %}
+				{{ targetEP.end_date }}
+				{% else %}
+				<i>unknown</i>
+				{% endif %}
+			</span>
+			<span class="inlbr">
+				<a style="font-size:1.75rem;" title="Edit the Person database record for {{ principle }}" href="javascript:epochEditFormShowHide()">
+					<i class="far fa-edit" style=""></i>
+				</a>
+			</span>
+		</p>
+		<hr>
+		<div id="edit_epoch_div" class="content-section initHide">
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					{{ epocheditform|crispy }}
+				</fieldset>
+				<button type="cancel" onclick="javascript:eppochEditFormShowHide()">cancel</button>
+				<button type="submit">submit</button>
+			</form>
+		</div>
+	</p>
+
+	<p><b>{{ targetEP.epoch_type|title }} epoch</b></p>
+	<h2>Description</h2>
+	<p>{{ targetEP.epoch_description|linebreaks }}</p>
+	<h2>Sources</h2>
+	<p>
+		<ul>
+			{% for s in targetEP.sources.all %}
+			<li>{{ s }}</li>
+			{% endfor %}
+		</ul>
+	</p>
+	<h2>People Involved</h2>
+	<p>
+		<ul>
+			{% for p in targetEP.epoch_people.all %}
+			<li>{{ p }}</li>
+			{% endfor %}
+		</ul>
+	</p>
+
+	<hr>
+	<p class="text-muted"><small>Created by {{ targetEP.created_by }} on {{ targetEP.created }}.</small></p>
+
+
+	<script type="text/javascript" src="{% static 'person-view.js' %}"></script>
+{% endblock %}

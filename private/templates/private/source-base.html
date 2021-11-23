@@ -1,0 +1,31 @@
+{% extends 'public/base.html' %}
+
+
+
+
+{% block content %}
+	<div class="col-lg-4 col-md-12">
+		<div id="people-sidebar" class="content-section">
+			<h3><u>Existing Sources</u> <a href="{% url 'source-add' %}" title="Add a Person.">+</a></h3>
+			<div id="people-sidebar-inner" class="inner-content-section">
+				<ul class="list-group">
+				{% for source in sources %}
+				{% if source.src_is_private == False or source.created_in_DB_by_user == request.user %}
+				<a class="sidebar-list-item" href="{% url 'source-details' source_id=source.id %}">
+					<li class="list-group-item">
+						{% if source.src_is_private %}
+						<span class="red">P</span>
+						{% endif %}
+						{{ source }}
+					</li>
+				</a>
+				{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-8 col-md-12">
+		{% block innercontent %}{% endblock %}
+	</div>
+{% endblock %}

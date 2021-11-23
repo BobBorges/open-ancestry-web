@@ -1,0 +1,14 @@
+{% extends 'private/events-base.html' %}
+
+{% block innercontent %}
+
+	<h1>Event Views</h1>
+	<p>Welcome to the <em>Events</em> section!</p>
+	<p>Select an Event on the sidebar (to the left) to view and edit its details.</p>
+	<p>People are at the center of data structure, so for instance &mdash; a person must exist in the database before you can create Events, Epochs and/or Research Items related to that person; two people must already exist in the database before you can define a relationship between them; a source must exist in the database before it can be assigned as an attribute of a Person, Event, Epoch, or Relationship.</p>
+	<h2>Add an Event</h2>
+	<p>When an Event is not already defined, you can add it to the data base by clicking 'Add an Event' below.</p>
+	
+	<a href="{% url 'event-add' %}"><button>Add an Event</button></a>
+
+{% endblock %}

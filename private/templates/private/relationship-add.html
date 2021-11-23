@@ -1,0 +1,30 @@
+{% extends 'private/relationships-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block innercontent %}
+	<div>
+		<h1>Add a new Relationship</h1>
+		<p>With the form below, you can add a new Relationship to the database.</p>
+		<hr>
+
+		{% if messages %}
+			{% for message in messages %}
+			<div class="alert alert-{{message.tags}}">
+				{{ message }}
+				{{ message.tags }}
+			</div>
+			{% endfor %}
+		{% endif %}
+
+		<br>
+		<form method='POST'>
+			{% csrf_token %}
+			<fieldset class="form-group">
+				{{ createrelationshipform|crispy }}
+			</fieldset>
+			<a href="{% url 'relationships-landing' %}"><button type="cancel">cancel</button></a>
+			<button name="createepochf" type="submit">submit</button>
+		</form>
+	</div>
+{% endblock %}

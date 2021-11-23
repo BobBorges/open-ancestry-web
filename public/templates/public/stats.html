@@ -1,0 +1,27 @@
+{% extends 'public/base.html' %}
+
+{% block content %}
+
+	<div class="col-lg-1 col-md-12"></div>
+	<div class="col-lg-10 col-md-12">
+		<h1>Summary Statistics for this instance</h1>
+
+		<p>There will be some basic summary statistics of this instance of Open Ancestry Web here.</p>
+
+		<p>
+			<ul>
+				<li>Number of Users: ##</li>
+				<li>Number of People in Database: ##</li>
+				<li>Number of Sources in Database: ##</li>
+				<li>Surnames in Database associated with more than three Person entries:
+					<ul>
+						<li>Surname 1 : #</li>
+						<li>Surname 2 : #</li>
+					</ul>
+				</li>
+			</ul>
+		</p>
+	</div>
+	<div class="col-lg-1 col-md-12"></div>
+
+{% endblock %}

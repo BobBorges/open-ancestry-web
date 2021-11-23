@@ -1,0 +1,32 @@
+{% extends 'public/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+	<div class="col-md-3"></div>
+	<div class="col-md-6">
+		<div class="content-section">
+			<h2>Who are you?</h2>
+			<p>Do you see yourself listed in the Person object list below? If so, you should select the Person object that corresponds to you in the form below. If not, you can skip this step altogether, or add a person object that corresponds to you as a user of the site.</p>
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Select yourself</legend>
+					{{ userispersonform|crispy }}
+				</fieldset>
+
+				<div class="form-group right">
+					<button type="reset" class="btn btn-secondary">cancel</button>
+					<button type="submit" class="btn btn-primary">submit</button>
+				</div>
+			</form>
+			<br>
+			<p style="text-align:center;">
+				<a href="{% url 'person-add' %}"><button class="btn btn-info">Add a new person</button></a>
+				<a href="{% url 'people-landing' %}"><button class="btn btn-info">Skip this step</button></a>
+			</p>
+		</div>
+	</div>
+	<div class="col-md-3"></div>
+
+{% endblock %}

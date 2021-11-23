@@ -1,0 +1,71 @@
+{% extends 'private/nuggets-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block innercontent %}
+	<h1>{{ targetNUG.title }}</h1>
+		<p>
+			<span class="inlbl">
+				From 
+				{% if targetNUG.start_date_approximate %}
+				c.a.
+				{% endif %}
+				{% if targetNUG.start_date %}
+				{{ targetNUG.start_date }}
+				{% else %}
+				<i>unknown</i>
+				{% endif %}
+				to
+				{% if targetNUG.end_date_approximate %}
+				c.a.
+				{% endif %}
+				{% if targetNUG.end_date %}
+				{{ targetNUG.end_date }}
+				{% else %}
+				<i>unknown</i>
+				{% endif %}
+			</span>
+			<span class="inlbr">
+				<a style="font-size:1.75rem;" title="Edit the Nugget database record." href="javascript:nuggetEditFormShowHide()">
+					<i class="far fa-edit" style=""></i>
+				</a>
+			</span>
+		</p>
+		<hr>
+		<div id="edit_nugget_div" class="content-section initHide">
+			<form method="POST">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					{{ editnuggetform|crispy }}
+				</fieldset>
+				<button type="cancel" onclick="javascript:nuggetEditFormShowHide()">cancel</button>
+				<button type="submit">submit</button>
+			</form>
+		</div>
+	</p>
+
+	<h2>Nugget</h2>
+	<p>{{ targetNUG.info|linebreaks }}</p>
+	<h2>Sources</h2>
+	<p>
+		<ul>
+			{% for s in targetNUG.sources.all %}
+			<li>{{ s }}</li>
+			{% endfor %}
+		</ul>
+	</p>
+	<h2>People Involved</h2>
+	<p>
+		<ul>
+			{% for p in targetNUG.people.all %}
+			<li>{{ p }}</li>
+			{% endfor %}
+		</ul>
+	</p>
+
+	<hr>
+	<p class="text-muted"><small>Created by {{ targetNUG.created_by }} on {{ targetNUG.created }}.</small></p>
+
+
+	<script type="text/javascript" src="{% static 'person-view.js' %}"></script>
+{% endblock %}

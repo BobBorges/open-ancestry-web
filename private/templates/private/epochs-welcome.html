@@ -1,0 +1,14 @@
+{% extends 'private/epochs-base.html' %}
+
+{% block innercontent %}
+
+	<h1>Epoch Views</h1>
+	<p>Welcome to the <em>Epochs</em> section!</p>
+	<p>Select an Epoch on the sidebar (to the left) to view and edit its details.</p>
+	<p>People are at the center of data structure, so for instance &mdash; a person must exist in the database before you can create Events, Epochs and/or Research Items related to that person; two people must already exist in the database before you can define a relationship between them; a source must exist in the database before it can be assigned as an attribute of a Person, Event, Epoch, or Relationship.</p>
+	<h2>Add an Epoch</h2>
+	<p>When an Epoch is not already defined, you can add it to the data base by clicking 'Add an Epoch' below.</p>
+	
+	<a href="{% url 'epoch-add' %}"><button>Add an Epoch</button></a>
+
+{% endblock %}

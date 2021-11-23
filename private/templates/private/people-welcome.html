@@ -1,0 +1,13 @@
+{% extends 'private/people-base.html' %}
+
+{% block innercontent %}
+
+	<h1>People Views</h1>
+	<p>Welcome to the <em>people</em> section!</p>
+	<p>Select a person on the sidebar (to the left) to view and edit their information, incl. events, epochs, and relationships.</p>
+	<p>People and sources are at the center of data structure, so for instance &mdash; a person must exist in the database before you can create Events, Epochs and/or Research Items related to that person; two people must already exist in the database before you can define a relationship between them; a source must exist in the database before it can be assigned as an attribute of a Person, Event, Epoch, or Relationship.</p>
+	<h2>Add a Person</h2>
+	<p>When a person is not already defined, you can add them to the data base by clicking 'Add a Person' below.</p>
+	<a href="{% url 'person-add' %}"><button>Add a Person</button></a>
+
+{% endblock %}

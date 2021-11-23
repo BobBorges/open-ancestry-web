@@ -1,0 +1,74 @@
+{% extends 'private/source-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block innercontent %}
+	<h1>{{ trgtsrc_title }}</h1>
+	<p class="text-muted">
+		<span class="inlbl">
+			&nbsp;&nbsp;Created
+			{% if trgtsrc_DOC %}
+			{% if trgtsrc_DOCapprox %}c.a.{% endif %}
+			{{ trgtsrc_DOC}}
+			{% else %}
+			<i>unknown date</i> 
+			{% endif %}
+			by
+			{% if trgtsrc_creator %}
+			{{ trgtsrc_creator }}
+			{% else %}
+			<i>unknown creator</i>
+			{% endif %}.
+		</span>
+		<span class="inlbr">
+			<a style="font-size:1.75rem;" title="Edit the Person database record for {{ principle }}" href="javascript:sourceEditFormShowHide()">
+				<i class="far fa-edit" style=""></i>
+			</a>
+		</span>
+	</p>
+	<hr>
+	<div id="sourceEditForm" class="content-section initHide">
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				{{ sourceeditform|crispy }}
+			</fieldset>
+			<button type="cancel" onclick="javascript:sourceEditFormShowHide()">cancel</button>
+			<button type="submit">submit</button>
+		</form>
+	</div>
+
+	<p>Type: {{ trgtsrc_type }}</p>
+	<h2>Description</h2>
+	<p>
+		{% if trgtsrc_description %}
+		{{ trgtsrc_description }}
+		{% else %}
+		<i>no description of this source provided</i>
+		{% endif %}
+	</p>
+	<h2>Full Reference</h2>
+	<p>
+		{% if trgtsrc_biblio%}
+		{{ trgtsrc_biblio }}
+		{% else %}
+		<i>no bibliographic reference of this source provided</i>
+		{% endif %}
+	</p>
+	<h2>Preview</h2>
+	<div id="img-preview-div">
+		<a target="_blank" href="/media/{{ trgtsrc_file }}">
+			<img id="img-preview" src="/media/{{ trgtsrc_file }}" title="If your browser supports previews of the file type, it will appear here." alt="Click download to save and view offline.">
+		</a>
+
+	</div>
+	<br>
+	<a href="/media/{{ trgtsrc_file }}" download><button>download</button></a>
+	<hr>
+	<p>
+		<small class="text-muted">
+			Source added to database on {{ trgtsrc_createdDB }} by user {{ trgtsrc_createdDBby }}.		
+		</small>
+	</p>
+	<script type="text/javascript" src="{% static 'person-view.js' %}"></script>
+{% endblock %}

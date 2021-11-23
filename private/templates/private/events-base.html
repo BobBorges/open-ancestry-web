@@ -1,0 +1,31 @@
+{% extends 'public/base.html' %}
+
+
+
+
+{% block content %}
+	<div class="col-lg-4 col-md-12">
+		<div id="people-sidebar" class="content-section">
+			<h3><u>Existing Events</u> <a href="{% url 'event-add' %}" title="Add an Event.">+</a></h3>
+			<div id="people-sidebar-inner" class="inner-content-section">
+				<ul class="list-group">
+				{% for event in events %}
+				{% if event.event_is_private == False or event.created_by == request.user %}
+				<a class="sidebar-list-item" href="{% url 'event-details' event_id=event.id %}">
+					<li class="list-group-item">
+						{% if event.event_is_private %}
+						<span class="red">P</span>
+						{% endif %}
+						{{ event }}
+					</li>
+				</a>
+				{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-8 col-md-12">
+		{% block innercontent %}{% endblock %}
+	</div>
+{% endblock %}

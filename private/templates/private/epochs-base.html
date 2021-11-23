@@ -1,0 +1,31 @@
+{% extends 'public/base.html' %}
+
+
+
+
+{% block content %}
+	<div class="col-lg-4 col-md-12">
+		<div id="people-sidebar" class="content-section">
+			<h3><u>Existing Epochs</u> <a href="{% url 'epoch-add' %}" title="Add an Event.">+</a></h3>
+			<div id="people-sidebar-inner" class="inner-content-section">
+				<ul class="list-group">
+				{% for epoch in epochs %}
+				{% if epoch.epoch_is_private == False or epoch.created_by == request.user %}
+				<a class="sidebar-list-item" href="{% url 'epoch-details' epoch_id=epoch.id %}">
+					<li class="list-group-item">
+						{% if epoch.epoch_is_private %}
+						<span class="red">P</span>
+						{% endif %}
+						{{ epoch }}
+					</li>
+				</a>
+				{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-8 col-md-12">
+		{% block innercontent %}{% endblock %}
+	</div>
+{% endblock %}

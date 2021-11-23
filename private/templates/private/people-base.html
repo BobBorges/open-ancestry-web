@@ -1,0 +1,22 @@
+{% extends 'public/base.html' %}
+
+
+
+
+{% block content %}
+	<div class="col-lg-4 col-md-12">
+		<div id="people-sidebar" class="content-section">
+			<h3><u>Existing People</u> <a href="{% url 'person-add' %}" title="Add a Person.">+</a></h3>
+			<div id="people-sidebar-inner" class="inner-content-section">
+				<ul class="list-group">
+				{% for person in people %}
+				<a class="sidebar-list-item" href="{% url 'person-details' principle_id=person.id %}"><li class="list-group-item">{{ person }}</li></a>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-8 col-md-12">
+		{% block innercontent %}{% endblock %}
+	</div>
+{% endblock %}

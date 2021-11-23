@@ -1,0 +1,68 @@
+{% extends 'public/base.html' %}
+
+{% block content %}
+
+	<div class="col-lg-1 col-md-12"></div>
+	<div class="col-lg-10 col-md-12">
+
+
+		<h1>About Open Ancestry Web</h1>
+
+
+		<h2>General</h2>
+
+		<p>Some general info...</p>
+
+		<p>The documentation sucks atm, but this will change to some extent. For now, you have to learn by doing/exploring...</p>
+
+
+
+		<hr>
+		<br><br>
+		<h3>|--> Backend: Database Structure <--|</h3>
+
+		<p>Database structure...</p>
+
+		<br>
+		<h4>Private items</h4>
+
+		<p>Certain types of database entries can be marked <i>private</i>, which means, in theory, the user who created the item is the only user who can view and edit the entry, incl. making the entry in question available to the other users of the site. It should be noted that site admins can access private instances.</p>
+
+		<p>Some policy should be developed about making private entries public after death of user|principle.</p>
+
+		<br>
+		<h4>Relationships</h4>
+		
+		<p>Definable relationships are biological or affinal. That is, they are based on births ("parent / child of") or marriages ("spouse of"). A third type ("guardian / ward of") is also defined. Other types of culturally relevant relationships ("siblings, cousins, inlaws, etc") are not explicitly defined, but can be deduced by those definable relationships.</p>
+
+		<br><br>
+		<h3>|--> Frontend: General How-to <--|</h3>
+
+		<p>Using the site...</p>
+
+		<br>
+		<h4>Private items</h4>
+
+		<p>When creating certain types of database entries, the user has an option to mark the entry as <i>private</i>. In theory, this means only that user will be able to view|edit that entry.</p>
+
+		<p>There are known issues with this feature right now. 
+			<ul>for instance:
+				<li>The titles of private sources are visible to all authenticated users when adding|editing database model instances, Person, Event, Epoch, Relationship etc. The other information attributes are not visible in the site for users who are not supposed to have access to that sourcec</li>
+				<li>If the raw URL of a source is known, the file can be viewed by anyone.</li>
+			</ul>
+		I'm working to fix this, but don't put any <i>really</i> sensitive information (SSNs or financial information about living people) in an Open Ancestry Web instance until these issues are fixed.
+		</p>
+
+
+		<br>
+		<h4>Relationships</h4>
+
+		<p>Relationships are inherantly bidirectional; that is if (a) X is the parent of Y, then (b) Y must be the child of X. When creating|editing relationship (a) in the UI, the relevant inverse relationship (b) is also created|editing.</p>
+
+
+
+
+	</div>
+	<div class="col-lg-1 col-md-12"></div>
+
+{% endblock %}

@@ -1,0 +1,1275 @@
+{% extends 'private/people-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block innercontent %}
+	<div class="row">
+		<div class="col-md-9">
+			<h1 style="margin-top: 130px">{{ principle }} 
+				{% if principle.sex == 'male' %}
+				<span style="color:blue;font-weight: bold;">&#9794;</span>
+				{% else %}
+				<span style="color:fuchsia;font-weight: bold;">&#9792;</span>
+				{% endif %}
+				<a style="font-size:1.75rem;" title="Edit the Person database record for {{ principle }}" href="javascript:personEditFormShowHide()">
+					<i class="far fa-edit" style=""></i>
+				</a>
+			</h1>
+		</div>
+		<div class="col-md-3 d-flex justify-content-end">
+			<img id="person-headshot" src="/media/{{ principle.headshot.source_file }}">
+		</div>
+	</div>
+	
+	<div id="person_edit_form" class="initHide content-section">
+		<form method='POST'>
+			{% csrf_token %}
+			<fieldset class="form-group">
+				{{ personeditform|crispy }}
+			</fieldset>
+			<button type="reset" onclick="javascript:personEditFormShowHide()">cancel</button>
+			<button name="personeditf" type="submit">submit</button>
+		</form>
+	</div>
+
+	<hr>
+	<!-- life and death -->
+	<div class="row">
+		<div class="col-sm-6">
+			<div>
+				{% if birth_event %}
+					<p>{% if birth_event.event_date_approximate %}
+						c.a.&nbsp;
+					{% endif %}
+					<i>{{ birth_event.event_date }}</i>&nbsp;
+					<small class="text-muted"><a id='birth_event_div_showerHider' href="javascript:showHideDeets('birth_event_div')">show details&nbsp;<i class='fas fa-arrow-alt-circle-down'></i></a></small>
+					</p>
+
+					<div id="birth_event_div" class="initHide content-section">
+						{% if birth_event.place %}
+						<p>Place: {{ birth_event.place }}</p>
+						{% endif %}
+
+						{% if birth_event.event_description %}
+						<p>Details: {{birth_event.event_description}}</p>
+						{% endif %}
+
+						{% if birth_event.sources.all|length > 0 %}
+						<p>Sources: {{ birth_event.sources.all }}</p>
+						{% else %}
+						<p><small>There are no sources defined for this Event.</small></p>
+						{% endif %}
+
+					 	<p class="right">
+					 		View|Edit Birth Event: 
+					 		<a href="{% url 'event-details' event_id=birth_event.id %}">
+					 			<i class="far fa-edit"></i>
+					 		</a>
+					 	</p>
+					</div>
+				{% else %}
+					<p><i>Unknown Birthdate</i></p>
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div>
+				{% if principle.living %}
+					<p class="right"><i>Living</i></p>
+				{% else %}
+					{% if death_event %}
+						<p class="right">
+							<small class="text-muted">
+								<a id="death_event_div_showerHider" href="javascript:showHideDeets1('death_event_div')">
+									<i class='fas fa-arrow-alt-circle-down'></i>
+									show details
+								</a>
+							</small>
+							{% if death_event.event_date_approximate %}
+							c.a.
+							{% endif %}	
+						<i>{{ death_event.event_date }}</i>
+						</p>
+						<div id="death_event_div" class="initHide content-section">
+							{% if death_event.place %}
+							<p>Place: {{ death_event.place }}</p>
+							{% endif %}
+
+							{% if death_event.event_description %}
+							<p>Details: {{ deathh_event.event_description|linebreaks }}</p>
+							{% endif %}
+
+							{% if death_event.sources.all|length > 0 %}
+							<p>Sources: {{ death_event.sources.all }}</p>
+							{% else %}
+							<p><small>There are no sources defined for this Event.</small></p>
+							{% endif %}
+
+						 	<p class="right">
+						 		View|Edit death event: 
+						 		<a href="{% url 'event-details' event_id=death_event.id %}">
+						 			<i class="far fa-edit"></i>
+						 		</a>
+						 	</p>
+						</div>
+					{% else %}
+						<p class="right"><i>Unknown Death Date</i></p>
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+
+	<br>
+	<!-- Alternate names -->
+	{% if alternate_names %}
+	<h2>Alternate Names <a href="javascript:anShowHide()" title="Add an Alternate Name.">+</a></h2>
+	
+	<div id="alternative-name_add_div" class="content-section initHide">
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset>
+				{{ createalternativenameform|crispy }}
+			</fieldset>
+			<button type="reset" onclick="javascript:anShowHide()">cancel</button>
+			<button name="createalternativenaemf" type="submit">submit</button>
+		</form>
+	</div>
+
+	{% for AN in alternate_names %}
+		<div class="content-section">
+			<p class="inlbl">
+				<small>{{ AN.alternative_type }}</small>
+				{% if AN.alternate_surname %}
+					{{ AN.alternate_surname }},
+				{% endif %}
+				{% if AN.alternate_first %}
+					{{ AN.alternate_first }}
+				{% endif %}
+				<small>
+				{% if AN.start_date_of_alternative or AN.end_date_of_alternative %}
+					({% if AN.start_date_of_alternative %}
+						{% if AN.start_date_approximate %}
+						c.a.
+						{% endif %}
+						{{ AN.start_date_of_alternative}}
+					{% endif %}
+					&nbsp;&mdash;&nbsp;
+					{% if AN.end_date_of_alternative %}
+						{% if AN.end_date_approximate %}
+						c.a.
+						{% endif %}
+						{{ AN.end_date_of_alternative }}
+					{% endif %})
+				{% endif %}
+				</small>
+			</p>
+			<p class="inlbr">
+				<small class="text-muted">
+					<a id="AN_deets_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets1('AN_deets_div_{{ forloop.counter0 }}')">
+						<i class='fas fa-arrow-alt-circle-down'></i>
+						show details
+					</a>
+				</small>
+			</p>
+
+			<div id="AN_deets_div_{{ forloop.counter0 }}" class="initHide">
+				<hr class="researchHr">
+				<div id="AN_innerdeets_{{forloop.counter0}}">
+					{% if AN.explanation  %}
+						<h3>Explanation</h3>
+						{{ AN.explanation|linebreaks }}
+					{% endif %}
+					{% if AN.sources.all|length > 0 %}
+						<h3>Sources</h3>
+						{% for source in AN.sources.all %}
+						<p><a href="{% url 'source-details' source_id=source.id %}">{{ source }}</a></p>
+						{% endfor %}
+					{% else %}
+						<p><small><i>There are no sources defined for this Alternate Name.</i></small></p>
+					{% endif %}
+					<p class="right">Edit Alternate Name
+						<a title="Edit this Alternate Name record." href="javascript:showHideDeets2('AN_editform_{{ forloop.counter0 }}', 'AN_innerdeets_{{ forloop.counter0 }}')">
+							<i class="far fa-edit" style=""></i>
+						</a>
+					</p>
+				</div>
+				<div id="AN_editform_{{ forloop.counter0 }}" class="initHide">
+					<form method="POST">
+						{% csrf_token %}
+						<fieldset>
+							<div class="form-group">
+								
+								<div id="div_id_alternate_first" class="form-group">
+        						    <label for="id_alternate_first" class="">
+        						    	Alternate first
+            						</label>
+									<div class="">
+                    					<input type="text" name="alternate_first" maxlength="255" class="textinput textInput form-control" id="id_alternate_first" value="{{ AN.alternate_first }}">
+                					</div>
+								</div>
+								
+								<div id="div_id_alternate_surname" class="form-group">
+							        <label for="id_alternate_surname" class="">
+							            Alternate surname
+							        </label>
+					                <div class="">
+				                        <input type="text" name="alternate_surname" maxlength="255" class="textinput textInput form-control" id="id_alternate_surname" value="{{ AN.alternate_surname }}">
+						            </div>    
+							    </div>
+								
+								<div id="div_id_alternative_type" class="form-group">
+							        <label for="id_alternative_type" class=" requiredField">
+                						Alternative type<span class="asteriskField">*</span>
+            						</label>
+					                <div class="">
+                    					<select name="alternative_type" class="select form-control" required="" id="id_alternative_type">
+											<option value="" >---------</option>
+											{% if AN.alternative_type == "nickname, or non-legal a.k.a." %}
+												<option value="nickname, or non-legal a.k.a." selected>nickname, or non-legal a.k.a.</option>
+												<option value="legal change due to marriage">legal change due to marriage</option>
+												<option value="legal change due to immigration">legal change due to immigration</option>
+												<option value="other">other</option>
+											{% elif AN.alternative_type == "legal change due to marriage" %}
+												<option value="nickname, or non-legal a.k.a.">nickname, or non-legal a.k.a.</option>
+												<option value="legal change due to marriage" selected>legal change due to marriage</option>
+												<option value="legal change due to immigration">legal change due to immigration</option>
+												<option value="other">other</option>
+											{% elif AN.alternative_type == "legal change due to immigration" %}
+												<option value="nickname, or non-legal a.k.a.">nickname, or non-legal a.k.a.</option>
+												<option value="legal change due to marriage">legal change due to marriage</option>
+												<option value="legal change due to immigration" selected>legal change due to immigration</option>
+												<option value="other">other</option>
+											{% else  %}
+												<option value="nickname, or non-legal a.k.a.">nickname, or non-legal a.k.a.</option>
+												<option value="legal change due to marriage">legal change due to marriage</option>
+												<option value="legal change due to immigration">legal change due to immigration</option>
+												<option value="other" selected>other</option>
+											{% endif %}				
+										</select>
+					                </div>
+    							</div>
+    							
+    							<div id="div_id_explanation" class="form-group">
+        					        <label for="id_explanation" class="">
+                						Explanation
+						            </label>
+					                <div class="">
+				                        <textarea name="explanation" cols="40" rows="10" class="textarea form-control" id="id_explanation">{{ AN.explanation }}</textarea>
+					                </div>
+						    	</div>
+						    	
+						    	<div id="div_id_start_date_of_alternative" class="form-group">
+        							<label for="id_start_date_of_alternative" class="">
+                						Start date of alternative
+            						</label>
+									<div class="">
+                        				<input type="text" name="start_date_of_alternative" maxlength="255" class="textinput textInput form-control" id="id_start_date_of_alternative" value="{{ AN.start_date_of_alternative }}">
+        								<small id="hint_id_start_date_of_alternative" class="form-text text-muted">YYYY-MM-DD. Approximate dates can also be given in YYYY-MM or YYYY format. In this case, tick the below 'Start | End date approximate' box.</small>
+        							</div>
+							    </div>
+						    	
+						    	<div class="form-group">
+    								<div id="div_id_start_date_approximate" class="form-check">
+                    					<input type="checkbox" name="start_date_approximate" class="checkboxinput form-check-input" id="id_start_date_approximate"{% if AN.start_date_approximate == True %} checked{% endif %}>
+						                <label for="id_start_date_approximate" class="form-check-label">
+                    						Start date approximate
+                						</label>
+    								</div>
+        						</div>
+						    	
+						    	<div id="div_id_end_date_of_alternative" class="form-group">
+        							<label for="id_end_date_of_alternative" class="">
+                						End date of alternative
+            						</label>
+									<div class="">
+                        				<input type="text" name="end_date_of_alternative" maxlength="255" class="textinput textInput form-control" id="id_end_date_of_alternative" value="{{ AN.end_date_of_alternative }}">
+        								<small id="hint_id_end_date_of_alternative" class="form-text text-muted">YYYY-MM-DD. Approximate dates can also be given in YYYY-MM or YYYY format. In this case, tick the below 'Start | End date approximate' box.</small>
+        							</div>
+							    </div>
+						    	
+						    	<div class="form-group">
+    								<div id="div_id_end_date_approximate" class="form-check">
+                    					<input type="checkbox" name="end_date_approximate" class="checkboxinput form-check-input" id="id_end_date_approximate"{% if AN.end_date_approximate == True %} checked{% endif %}>
+						                <label for="id_end_date_approximate" class="form-check-label">
+                    						End date approximate
+                						</label>
+    								</div>
+        						</div>
+						    	
+						    	<div id="div_id_sources" class="form-group">
+							        <label for="id_sources" class="">
+                						Sources
+            						</label>
+					                <div class="">
+										<select name="sources" class="selectmultiple form-control" id="id_sources" multiple="">
+										{% for x, y in editalternativenameform.fields.sources.choices %}	
+											<option value="{{x}}"{% for s in AN.sources.all %}{% if x == s.id %} selected{% endif %}{% endfor %}>{{y}}</option>
+										{% endfor %}
+										</select>
+							        </div>
+							    </div>
+							</div>
+							<input type="hidden" name="ANIDfield" id="ANIDdield" value="{{ AN.id }}">
+						</fieldset>
+						<button type="reset" onclick="javascript:showHideDeets2('AN_editform_{{ forloop.counter0 }}', 'AN_innerdeets_{{ forloop.counter0 }}')">cancel</button>
+						<button name="editalternatenamef" type="submit">submit</button>
+					</form>
+				</div>
+				<hr class="researchHr">
+				<small class="text-muted">Created by {{ AN.created_by }} on {{ AN.created }}.</small>
+			</div>
+
+		</div>
+	{% endfor %}
+	{% endif %}
+
+
+	<!-- Relationships -->
+	<h2>Relationships <a href="{% url 'relationship-add' %}" title="Add a Relationship.">+</a></h2>
+	<!-- Parents -->
+	<div class="h3subdiv">
+		<h3>Parents</h3>
+		{% if parents %}
+		{% for p, pes in parents.items %}
+		{% if p.relationship_is_private == False or p.created_by == request.user %}
+			<div class="content-section">
+				<p class="inlbl">
+					{% if p.relationship_is_private %}
+					<span style="color:red;">P</span>
+					{% endif %}					
+					<a href="{% url 'person-details' principle_id=p.referent_id %}">
+						{{ p.referent }}
+					</a>
+					&nbsp;
+					{% if p.referent.sex == 'male' %}
+					<span style="color:blue; font-weight: bold; font-size: 1.5rem;">&#9794;</span>
+					{% else %}
+					<span style="color:fuchsia; font-weight: bold; font-size: 1.5rem;">&#9792;</span>
+					{% endif %}
+					&nbsp;
+					<small>
+						(<i>b.</i>
+						{% if pes.birth %}
+							{{ pes.birth.event_date }}
+						{% else %}
+							<i>unknown</i>
+						{% endif %}
+						&nbsp;&mdash;&nbsp;
+						{% if pes.living %}
+							<i>Living</i>
+						{% else %}
+							<i>d.</i>	
+							{% if pes.death %}
+								{{ pes.death.event_date }}
+							{% else %}
+								unknown
+							{% endif %}
+						{% endif %})
+						</small>
+					</p>
+					<p class="inlbr">
+						<small>
+							<a id="parent_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('parent_div_{{ forloop.counter0 }}');">show details&nbsp;<i class='fas fa-arrow-alt-circle-down'></i></a>
+						</small>
+					</p>
+				</span>
+				<div id="parent_div_{{ forloop.counter0 }}" class="initHide">
+					<hr class="researchHr">
+					
+					{% if p.sources.all|length > 0 %}
+					<p>Sources</p>
+					{% else %}
+					<p><small>There are no Sources for this Relationship</small></p>
+					{% endif %}
+
+					<p class="right">Edit Relationahip: <a title="Edit this Relationship record." href="{% url 'relationship-details' relationship_id=p.id %}"><i class="far fa-edit" style=""></i></a></p>
+					<hr class="researchHr">
+					<small class="text-muted">Created by {{ p.created_by }} on {{ p.created }}.</small>
+				</div>
+			</div>
+		{% endif %}
+		{% endfor %}
+		{% else %}
+			<p><i>No parents have been defined yet.</i></p>
+		{% endif %}
+
+		<!-- Guardians -->
+		{% if guardians %}
+		<h4>Guardians</h4>
+		{% for p, pes in guardians.items %}
+		{% if p.relationship_is_private == False or p.created_by == request.user %}
+			<div class="content-section">
+				<p class="inlbl">
+					{% if p.relationship_is_private %}
+					<span style="color:red;">P</span>
+					{% endif %}						
+					<a href="{% url 'person-details' principle_id=p.referent_id %}">
+						{{ p.referent }}
+					</a>
+					&nbsp;
+					{% if p.referent.sex == 'male' %}
+					<span style="color:blue; font-weight: bold; font-size: 1.5rem;">&#9794;</span>
+					{% else %}
+					<span style="color:fuchsia; font-weight: bold; font-size: 1.5rem;">&#9792;</span>
+					{% endif %}
+					&nbsp;
+					<small>
+						(<i>b.</i>
+						{% if pes.birth %}
+							{{ pes.birth.event_date }}
+						{% else %}
+							<i>unknown</i>
+						{% endif %}
+						&nbsp;&mdash;&nbsp;
+						{% if pes.living %}
+							<i>Living</i>
+						{% else %}
+							<i>d.</i>	
+							{% if pes.death %}
+								{{ pes.death.event_date }}
+							{% else %}
+								unknown
+							{% endif %}
+						{% endif %})
+						</small>
+					</p>
+					<p class="inlbr">
+						<small>
+							<a id="guardian_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('guardian_div_{{ forloop.counter0 }}');">show details&nbsp;<i class='fas fa-arrow-alt-circle-down'></i></a>
+						</small>
+					</p>
+				</span>
+				<div id="guardian_div_{{ forloop.counter0 }}" class="initHide">
+					<hr class="researchHr">
+					
+					{% if p.sources.all|length > 0 %}
+					<p>Sources</p>
+					{% else %}
+					<p><small>There are no Sources for this Relationship</small></p>
+					{% endif %}
+
+					<p class="right">Edit Relationahip: <a title="Edit this Relationship record." href="{% url 'relationship-details' relationship_id=p.id %}"><i class="far fa-edit" style=""></i></a></p>
+					<hr class="researchHr">
+					<small class="text-muted">Created by {{ p.created_by }} on {{ p.created }}.</small>					
+				</div>
+			</div>
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+
+	</div>
+
+
+
+	<!-- Siblings -->
+	<div class="h3subdiv">
+		<h3>Siblings</h3>
+		{% if siblings or half_siblings %}
+			{% if siblings %}
+			<h4>Full Siblings</h4>
+			{% for sib, sibes in siblings.items %}
+			{% if sib.relationship_is_private == False or sib.created_by == request.user %}
+			<div class="content-section">
+				<span>
+					{% if sib.relationship_is_private %}
+					<span style="color:red;">P</span>
+					{% endif %}						
+					<a href="{% url 'person-details' principle_id=sibes.id %}">
+						{{ sib }}
+					</a>
+					&nbsp;
+					{% if sib.sex == 'male' %}
+					<span style="color:blue; font-weight: bold; font-size: 1.5rem;">&#9794;</span>
+					{% else %}
+					<span style="color:fuchsia; font-weight: bold; font-size: 1.5rem;">&#9792;</span>
+					{% endif %}
+					&nbsp;
+					<small>
+						(<i>b.</i>
+						{% if sibes.birth %}
+							{{ sibes.birth.event_date }}
+						{% else %}
+							<i>unknown</i>
+						{% endif %}
+						&nbsp;&mdash;&nbsp;
+						{% if sibes.living %}
+							<i>Living</i>
+						{% else %}
+							<i>d.</i>	
+							{% if sibes.death %}
+								{{ sibes.death.event_date }}
+							{% else %}
+								unknown
+							{% endif %}
+						{% endif %})
+					</small>
+				</span>
+			</div>
+			{% endif %}
+			{% endfor %}
+			{% endif %}
+
+			{% if half_siblings %}
+			<h4>Half-siblings</h4>
+			{% for hsib, hsibes in half_siblings.items %}
+
+			<div class="content-section">
+				<span>					
+					<a href="{% url 'person-details' principle_id=hsibes.id %}">
+						{{ hsib }}
+					</a>
+					&nbsp;
+					{% if hsib.sex == 'male' %}
+					<span style="color:blue; font-weight: bold; font-size: 1.5rem;">&#9794;</span>
+					{% else %}
+					<span style="color:fuchsia; font-weight: bold; font-size: 1.5rem;">&#9792;</span>
+					{% endif %}
+					&nbsp;
+					<small>
+						(<i>b.</i>
+						{% if hsibes.birth %}
+							{{ hsibes.birth.event_date }}
+						{% else %}
+							<i>unknown</i>
+						{% endif %}
+						&nbsp;&mdash;&nbsp;
+						{% if hsibes.living %}
+							<i>Living</i>
+						{% else %}
+							<i>d.</i>	
+							{% if hsibes.death %}
+								{{ hsibes.death.event_date }}
+							{% else %}
+								unknown
+							{% endif %}
+						{% endif %})
+						{% if hsibes.coparent %}
+							Other parent: <a href="{% url 'person-details' principle_id=hsibes.coparent.referent_id %}">{{ hsibes.coparent.referent }}</a>.
+							{% if hsibes.coparent.referent.sex == 'male' %}
+							<span style="color:blue; font-weight: bold; font-size: 1rem;">&#9794;</span>
+							{% else %}
+							<span style="color:fuchsia; font-weight: bold; font-size: 1rem;">&#9792;</span>
+							{% endif %}
+						{% else %}
+							Other parent is undefined.
+						{% endif %}
+					</small>
+				</span>
+			</div>
+
+			{% endfor %}
+			{% endif %}
+		{% else %}
+			<p><i>No sibings have been defined yet.</i></p>
+		{% endif %}
+	</div>
+
+	<!-- Spouses -->
+	<div class="h3subdiv">
+		<h3>Spouses</h3>
+		{% if spouses %}
+		{% for sp, spes in spouses.items %}
+		{% if sp.relationship_is_private == False or sp.created_by == request.user %}
+			<div class="content-section">
+				<p class="inlbl">
+					{% if sp.relationship_is_private %}
+					<span style="color:red;">P</span>
+					{% endif %}						
+					<a href="{% url 'person-details' principle_id=sp.referent_id %}">
+						{{ sp.referent }}
+					</a>&nbsp;
+					{% if sp.referent.sex == 'male' %}
+					<span style="color:blue;font-weight: bold; font-size: 1.5rem;">&#9794;</span>
+					{% else %}
+					<span style="color:fuchsia;font-weight: bold; font-size: 1.5rem;">&#9792;</span>
+					{% endif %}
+					&nbsp;
+					<small>
+						(<i>b.</i>
+						{% if spes.birth %}
+							{{ spes.birth.event_date }}
+						{% else %}
+							<i>unknown</i>
+						{% endif %}
+						&nbsp;&mdash;&nbsp;
+						{% if spes.living %}
+							<i>Living</i>
+						{% else %}
+							<i>d.</i>
+							{% if spes.death %}
+								{{ pes.death.event_date }}
+							{% else %}
+								unknown
+							{% endif %}
+						{% endif %})
+					</small>
+				</p>
+				<p class="inlbr">
+					<small>
+						<a id="spouse_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('spouse_div_{{ forloop.counter0 }}')">show details&nbsp;
+							<i class="fas fa-arrow-alt-circle-down" style=""></i>
+						</a>
+					</small>	
+				</p>
+				{% if spes.marriages %}
+				<br><small>Marriages to {{principle}}:</small>
+				<span>
+					<small>
+					{% for m in spes.marriages %}
+						({% if m.start_date_approximate %}c.a.&nbsp;{% endif %}{{ m.start_date }} &mdash; {% if m.end_date_approximate %}c.a.&nbsp;{% endif %}{{ m.end_date }})
+					{% endfor %}
+					</small>
+				</span>
+				{% endif %}
+
+				<div id="spouse_div_{{ forloop.counter0 }}" class="initHide">
+					<hr class="researchHr"> 
+					{% if sp.sources.all|length > 0 %}
+					<p>Sources</p>
+					{% else %}
+					<p><small>There are no Sources for this Relationship.</small></p>
+					{% endif %}
+					<p class="right">Edit Relationahip: <a title="Edit this Relationship record." href="{% url 'relationship-details' relationship_id=sp.id %}"><i class="far fa-edit" style=""></i></a></p>
+					<hr class="researchHr">
+					<small class="text-muted">Created by {{ sp.created_by }} on {{ sp.created }}.</small>
+				</div>
+
+			</div>
+		{% endif %}
+		{% endfor %}
+		{% else %}
+			<p><i>No spouses have been defined yet.</i></p>
+		{% endif %}
+	</div>
+
+	<!-- Children -->
+	<div class="h3subdiv">
+		<h3>Children</h3>
+		{% if children %}
+		{% for c, ces in children.items %}
+		{% if c.relationship_is_private == False or c.created_by == request.user %}
+			<div class="content-section">
+				<p class="inlbl">
+					{% if c.relationship_is_private %}
+					<span style="color:red;">P</span>
+					{% endif %}	
+					<a href="{% url 'person-details' principle_id=c.referent_id %}">
+						{{ c.referent }}
+					</a>&nbsp;
+					{% if c.referent.sex == 'male' %}
+					<span style="color:blue;font-weight: bold; font-size: 1.5rem;">&#9794;</span>
+					{% else %}
+					<span style="color:fuchsia;font-weight: bold; font-size: 1.5rem;">&#9792;</span>
+					{% endif %}
+					&nbsp;
+					<small>
+						(<i>b.</i>
+						{% if ces.birth %}
+							{{ ces.birth.event_date }}
+						{% else %}
+							<i>unknown</i>
+						{% endif %}
+						&nbsp;&mdash;&nbsp;
+						{% if ces.living %}
+							<i>Living</i>
+						{% else %}
+							<i>d.</i>
+							{% if ces.death %}
+								{{ ces.death.event_date }}
+							{% else %}
+								unknown
+							{% endif %}
+						{% endif %})
+					</small>
+					<small>with
+						{% if ces.coparent %}
+							<a href="{% url 'person-details' principle_id=ces.coparent.id %}">
+							{{ ces.coparent }}
+							</a>
+						{% else %}
+							unknown
+						{% endif %}.
+					</small>
+				</p>
+				<p class="inlbr">
+					<small>
+						<a id="child_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('child_div_{{ forloop.counter0 }}')">show details&nbsp;
+							<i class="fas fa-arrow-alt-circle-down" style=""></i>
+						</a>
+					</small>	
+				</p>
+				<div id="child_div_{{ forloop.counter0 }}" class="initHide">
+					<hr class="researchHr">
+					{% if c.sources.all|length > 0 %}
+					<p>Sources</p>
+					{% else %}
+					<p><small>There are no Sources for this Relationship.</small></p>
+					{% endif %}
+					<p class="right">Edit Relationship:&nbsp;
+						<a href="{% url 'relationship-details' relationship_id=c.id %}">
+							<i class="far fa-edit" style=""></i>
+						</a>
+					</p>
+					<hr class="researchHr">
+					<small class="text-muted">Created by {{ c.created_by }} on {{ c.created }}.</small>						
+				</div>
+			</div>
+		{% endif %}
+		{% endfor %}
+		{% else %}
+			<p><i>No children have been defined yet.</i></p>
+		{% endif %}
+
+		<!-- Wards -->
+		{% if wards %}
+		<h4>Wards</h4>
+		{% for c, ces in wards.items %}
+		{% if c.relationship_is_private == False or c.created_by == request.user %}
+			<div class="content-section">
+				<p class="inlbl">
+					{% if c.relationship_is_private %}
+					<span style="color:red;">P</span>
+					{% endif %}						
+					<a href="{% url 'person-details' principle_id=c.referent_id %}">
+						{{ c.referent }}
+					</a>&nbsp;
+					{% if c.referent.sex == 'male' %}
+					<span style="color:blue;font-weight: bold; font-size: 1.5rem;">&#9794;</span>
+					{% else %}
+					<span style="color:fuchsia;font-weight: bold; font-size: 1.5rem;">&#9792;</span>
+					{% endif %}
+					&nbsp;
+					<small>
+						(<i>b.</i>
+						{% if ces.birth %}
+							{{ ces.birth.event_date }}
+						{% else %}
+							<i>unknown</i>
+						{% endif %}
+						&nbsp;&mdash;&nbsp;
+						{% if ces.living %}
+							<i>Living</i>
+						{% else %}
+							<i>d.</i>
+							{% if ces.death %}
+								{{ ces.death.event_date }}
+							{% else %}
+								unknown
+							{% endif %}
+						{% endif %})
+					</small>
+				</p>
+				<p class="inlbr">
+					<small>
+						<a id="child_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('child_div_{{ forloop.counter0 }}')">show details&nbsp;
+							<i class="fas fa-arrow-alt-circle-down" style=""></i>
+						</a>
+					</small>	
+				</p>
+				<div id="child_div_{{ forloop.counter0 }}" class="initHide">
+					<hr class="researchHr">
+					{% if c.sources.all|length > 0 %}
+					<p>Sources</p>
+					{% else %}
+					<p><small>There are no Sources for this Relationship.</small></p>
+					{% endif %}
+					<p class="right">Edit Relationship:&nbsp;
+						<a href="{% url 'relationship-details' relationship_id=c.id %}">
+							<i class="far fa-edit" style=""></i>
+						</a>
+					</p>
+					<hr class="researchHr">
+					<small class="text-muted">Created by {{ c.created_by }} on {{ c.created }}.</small>	
+				</div>
+			</div>
+		{% endif %}
+		{% endfor %}
+		{% endif %}
+
+	</div>
+
+
+	<!-- Events -->
+	<h2>Events <a href="{% url 'event-add' %}" title="Add an Event.">+</a></h2>
+	{% if events %}
+		{% for event in events %}
+		{% if event.event_is_private == False or event.created_by == request.user %}
+		<div class="content-section">
+			<p class="inlbl">
+				{% if event.event_is_private %}
+				<span style="color:red;">P</span>
+				{% endif %}	
+				{% if event.event_date_approximate %}c.a. {% endif %}{{ event.event_date }}: {{ event.event_title }}
+			</p>
+
+			<p class="inlbr">
+				<small>
+					<a id="LE_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('LE_div_{{ forloop.counter0 }}')">show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>
+			</p>
+
+			<div class="initHide" id="LE_div_{{ forloop.counter0 }}">
+				<hr class="researchHr">
+					<p>Event Type: {{ event.event_type }}</p>
+					{% if event.event_description %}
+						<p>
+							<b>Event description</b><br>
+							{{ event.event_description }}
+						</p>
+					{% endif %}
+					{% if event.event_people.all|length > 1 %}
+						<p><b>Other People Involved:</b><br>
+						{% for e in event.event_people.all %}
+							{% if e != principle %}
+								<a href="{% url 'person-details' principle_id=e.id %}">{{ e }}</a>
+							{% endif %}
+						{% endfor %}
+						</p>
+					{% endif %}
+
+					{% if event.sources.all|length > 0 %}
+						<p>Sources</p>
+					{% else %}
+						<p>
+							<small>
+							There are no Sources for this Relationship.
+							</small>
+						</p>
+					{% endif %}
+				<p class="right">
+					Edit Event:&nbsp;
+					<a title="Edit this Event record." href="{% url 'event-details' event_id=event.id %}"><i class="far fa-edit" style=""></i></a>
+				</p>
+				<hr class="researchHr">
+				<small class="text-muted">Created by {{ event.created_by }} on {{ event.created }}.</small>	
+			</div>
+
+		</div>
+	{% endif %}
+	{% endfor %}
+	{% else %}
+		<p><i>No events have been defined yet.</i></p>
+	{% endif %}
+
+
+	<!-- Epochs -->
+	<h2>Epochs <a href="{% url 'epoch-add' %}" title="Add an Epoch.">+</a></h2>
+	{% if epochs %}
+		{% for epoch in epochs %}
+		{% if epoch.epoch_is_private == False or epoch.created_by == request.user %}
+
+		<div class="content-section">
+			<p class="inlbl">
+				{%if epoch.epoch_is_private %}<span class="red">P</span>{% endif %}
+				{% if epoch.start_date_approximate %}c.a. {% endif %}{{ epoch.start_date }}
+				&nbsp;&mdash;&nbsp;
+				{% if epoch.end_date_approximate %}c.a. {% endif %}{{ epoch.end_date }}: {{ epoch.epoch_title }}
+			</p>
+			<p class="inlbr">
+				<small>
+					<a id="epoch_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('epoch_div_{{ forloop.counter0 }}')">
+						show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>				
+			</p>
+		
+			<div id="epoch_div_{{ forloop.counter0 }}" class="initHide">
+				<hr class="researchHr">
+				<p>Epoch Type: {{ epoch.epoch_type }}</p>
+					{% if epoch.epoch_description %}
+						<p>
+							<b>Epoch description</b><br>
+							{{ epoch.epoch_description }}
+						</p>
+					{% endif %}
+					{% if epoch.epoch_people.all|length > 1 %}
+						<p><b>Other People Involved:</b><br>
+						{% for e in epoch.epoch_people.all %}
+							{% if e != principle %}
+								<a href="{% url 'person-details' principle_id=e.id %}">{{ e }}</a>
+							{% endif %}
+						{% endfor %}
+						</p>
+					{% endif %}
+
+					{% if epoch.sources.all|length > 0 %}
+						<p>Sources</p>
+						<ul>
+						{% for s in epoch.sources.all %}
+							<li>{{ s }}</li>
+						{% endfor %}
+						</ul>
+					{% else %}
+						<p>
+							<small>
+							There are no Sources for this Relationship.
+							</small>
+						</p>
+					{% endif %}
+	
+				<p class="right">
+					View|Edit Epoch:&nbsp;
+					<a title="View or Edit this Epoch record." href="{% url 'epoch-details' epoch_id=epoch.id %}">
+						<i class="far fa-edit" style=""></i>
+					</a>
+				</p>
+				<hr class="researchHr">
+				<small class="text-muted">Created by {{ epoch.created_by }} on {{ epoch.created }}.</small>	
+			</div>
+		</div>
+
+
+		{% endif %}
+		{% endfor %}
+	{% else %}
+		<p><i>No events have been defined yet.</i></p>
+	{% endif %}
+
+
+	<!-- Bio Nuggets -->
+	<h2>Biographical Information Nuggets <a href="{% url 'nugget-add' %}" title="Add a Nugget.">+</a></h2>
+	{% if BINs %}
+		{% for BIN in BINs %}
+		{% if BIN.nugget_is_private == False or BIN.created_by == request.user %}
+		<div class="content-section">
+			<p class="inlbl">
+				{%if BIN.nugget_is_private %}<span class="red">P</span>{% endif %}
+
+				{% if BIN.start_date_approximate %}c.a. {% endif %}{{ BIN.start_date }}
+				&nbsp;&mdash;&nbsp;
+				{% if BIN.end_date_approximate %}c.a. {% endif %}{{ BIN.end_date }}: {{ BIN.title }}
+			</p>
+			<p class="inlbr">
+				<small>
+					<a id="bin_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('bin_div_{{ forloop.counter0 }}')">
+						show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>	
+			</p>
+			<div id="bin_div_{{ forloop.counter0 }}" class="initHide">
+				<hr class="researchHr">
+
+				{% if BIN.info %}
+					<p><b>Nugget Info</b><br>
+						{{ BIN.info }}
+					</p>
+				{% endif %}
+					{% if BIN.people.all|length > 1 %}
+						<p><b>Other People Involved:</b><br>
+						{% for e in BIN.people.all %}
+							{% if e != principle %}
+								<a href="{% url 'person-details' principle_id=e.id %}">{{ e }}</a>
+							{% endif %}
+						{% endfor %}
+						</p>
+					{% endif %}
+
+					{% if BIN.sources.all|length > 0 %}
+						<p>Sources</p>
+						<ul>
+						{% for s in BIN.sources.all %}
+							<li>{{ s }}</li>
+						{% endfor %}
+						</ul>
+					{% else %}
+						<p>
+							<small>
+							There are no Sources for this Relationship.
+							</small>
+						</p>
+					{% endif %}
+				<p class="right">View|Edit Nugget:&nbsp;
+					<a title="Edit this Biographical Information Nugget record." href="{% url 'nugget-details' nugget_id=BIN.id %}">
+						<i class="far fa-edit" style=""></i>
+					</a>
+				</p>
+				<hr class="researchHr">
+				<small class="text-muted">Created by {{ BIN.created_by }} on {{ BIN.created }}.</small>	
+			</div>
+		</div>
+		{% endif %}
+		{% endfor %}
+	{% else %}
+		<p><i>No Biographical Information Nuggets have been defined yet.</i></p>
+	{% endif %}
+
+
+	<!-- Sources -->
+	<h2>Sources <a href="{% url 'source-add' %}" title="Add a Source.">+</a></h2>
+	{% if principle.sources.all|length > 0 %}
+	{% for source in principle.sources.all %}
+	{% if source.src_is_private == False or source.created_in_DB_by_user == request.user %}
+		<div class="content-section">
+			<P class="inlbl">
+				{% if source.src_is_private %}<span class="red">P</span>{% endif %}				
+				{{ source.source_type }}: <a href="{% url 'source-details' source_id=source.id %}">{{ source.source_title }}</a>
+			</P>
+			<p class="inlbr">
+				<small>
+					<a id="source_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('source_div_{{ forloop.counter0 }}')">
+						show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>
+			</p>
+			<div class="initHide" id="source_div_{{ forloop.counter0 }}">
+				<hr class="researchHr">
+				
+				<p>
+					<b>Date created:</b>&nbsp;
+					{% if source.source_date_of_creation %}
+						{% if source.source_DOC_approximate %}c.a.{% endif %}
+						{{ source.source_date_of_creation }}
+					{% else %}
+						<small><i>undefined date</i></small>
+					
+					{% endif %}
+				</p>
+				
+				{% if source.source_creator %}
+				<p>
+					<b>Creator:</b>&nbsp;{{ source.source_creator }}
+				</p>
+				{% endif %}
+				
+				<p>
+					<b>Description</b><br>
+					{% if source.source_description  %}
+						{{ source.source_description }}
+					{% else %}
+						<small><i>No description</i></small>
+					{% endif %}
+				</p>
+
+				{% if source.source_bibliographic_reference %}
+				<p>
+					<b>Bibliographic Reference</b><br>
+					{{ source.source_bibliographic_reference|linebreaks }}
+				</p>
+				{% endif %}
+
+				<p><b>Preview</b></p>
+				<div id="img-preview-div">
+					<a target="_blank" href="/media/{{ source.source_file }}">
+						<img id="img-preview" src="/media/{{ source.source_file }}" title="If your browser supports previews of the file type, it will appear here." alt="Click download to save and view offline.">
+					</a>
+				</div>
+
+				<p class="right">Edit Source:&nbsp;
+					<a href="{% url 'source-details' source_id=source.id %}">
+						<i class="far fa-edit" style=""></i>
+					</a>
+				</p>
+				<hr class="researchHr">
+				<small class="text-muted">Entered in DB by {{ source.created_in_DB_by_user }} on {{ BIN.created_in_DB }}.</small>		
+			</div>
+		</div>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+
+	<br><br><hr>
+	<!-- Research -->
+	<h2>Research Items <a href="javascript:showHideResearchForm()" title="Add a Research Item.">+</a></h2>
+
+	<div id="research_form" class="content-section initHide">
+		<h3>Add a research item.</h3>
+		<p>Here, you can add questions or theories you have about <i>{{ principle }}</i>. You can also list a "dead end", that is where you have looked for information unsucessfully, to help others not waste their time repeating work that you've already done.</p>
+		<p>If you select <i>Research is private</i>, only you will be able to see the Research Item you create. You will see a <span style="color:red;">P</span> in the top left corner of your private research items.</p>
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				{{ researchform|crispy }}
+			</fieldset>
+			<button type="reset" onclick="javascript:showHideResearchForm()">cancel</button>
+			<button name="researchf" type="submit">submit</button>
+		</form>
+	</div>
+
+	<!-- Questions -->
+	<div class="h3subdiv">
+		<h3>Research Questions</h3>
+		{% if research_questions %}
+		{% for question, replies in research_questions.items %}
+		{% if question.research_is_private == False or question.created_by == request.user %}
+		<div class="content-section">
+		{% if question.active %}
+			{% if question.research_is_private %}
+			<span style="color:red;">P</span>
+			{% endif %}
+			<small>{{ question.created_by }} asked on {{ question.created }}</small><br><hr class="researchHr">
+			<p class="inlbl">
+				<b>{{ question.title }}</b>
+			</p>
+			<p class="inlbr">
+				<small>
+				 	<a id="RQ_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('RQ_div_{{ forloop.counter0 }}')">
+				 		show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>
+			</p>
+			<div class="initHide" id="RQ_div_{{ forloop.counter0 }}">
+				<p>{{ question.content }}</p>
+			</div>
+			<ul class="list-group">
+				{% for reply in replies %}
+				<li class="list-group-item">
+					<small>{{ reply.created_by }} replied on {{ reply.created }}</small><br><hr class="researchHr">
+					{{ reply.content }}
+					<p></p>
+				</li>
+				{% endfor %}
+			</ul>
+			<!-- reply form -->
+			<p class="right"><small><a href="javascript:showHideReplies('question_reply_form_{{ forloop.counter0 }}')">Reply</a></small></p>
+			<div class="initHide" id="question_reply_form_{{ forloop.counter0 }}">
+				<form method='POST'>
+					{% csrf_token %}
+					<fieldset class="form-group">
+						{{ replyform|crispy }}
+						<input type="hidden" name="OP" value="{{ question.id }}">
+					</fieldset>
+					<button type="reset" onclick="javascript:showHideReplies('question_reply_form_{{ forloop.counter0 }}')">cancel</button>
+					<button name="replyf" type="submit">submit</button>
+				</form>
+			</div>
+		{% else %}
+			<small class="text-muted">{{ question.title }} (<i>inactive</i>)</small>
+		{% endif %}
+		</div>
+		{% endif %}
+		{% endfor %}
+		{% else %}
+			<p><i>No Theories have been posited yet.</i></p>
+		{% endif %}
+	</div>
+
+
+	<!-- Theories -->
+	<div class="h3subdiv">
+		<h3>Theories</h3>
+		{% if theories %}
+		{% for theory, t_replies in theories.items %}
+		{% if theory.research_is_private == False or theory.created_by == request.user %}
+		<div class="content-section">
+		{% if theory.active %} 
+			{% if theory.research_is_private %}
+			<span class="red">P</span>
+			{% endif %}
+			<small>{{ theory.created_by }} asked on {{ theory.created }}</small><br><hr class="researchHr">
+			<p class="inlbl">
+				<b>{{ theory.title }}</b>
+			</p>
+			<p class="inlbr">
+				<small>
+				 	<a id="theory_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('theory_div_{{ forloop.counter0 }}')">
+				 		show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>
+			</p>
+			<div class="initHide" id="theory_div_{{ forloop.counter0 }}">
+				<p>{{ theory.content }}</p>
+			</div>
+			<ul class="list-group">
+				{% for reply in t_replies %}
+				<li class="list-group-item">
+					<small>{{ reply.created_by }} replied on {{ reply.created }}</small><br><hr class="researchHr">
+					{{ reply.content }}
+					<p></p>
+				</li>
+				{% endfor %}
+			</ul>
+			<!-- reply form -->
+			<p class="right"><small><a href="javascript:showHideReplies('theory_reply_form_{{ forloop.counter0 }}')">Reply</a></small></p>
+			<div class="initHide" id="theory_reply_form_{{ forloop.counter0 }}">
+				<form method='POST'>
+					{% csrf_token %}
+					<fieldset class="form-group">
+						{{ replyform|crispy }}
+						<input type="hidden" name="OP" value="{{ theory.id }}">
+					</fieldset>
+					<button type="reset" onclick="javascript:showHideReplies('theory_reply_form_{{ forloop.counter0 }}')">cancel</button>
+					<button name="replyf" type="submit">submit</button>
+				</form>
+			</div>
+		{% else %}
+			<small class="text-muted">{{ theory.title }} (<i>inactive</i>)</small>
+		{% endif %}
+		</div>
+		{% endif %}
+		{% endfor %}
+		{% else %}
+		<p><i>No Theories have been posited yet.</i></p>
+		{% endif %}
+	</div>
+
+
+	<!-- Dead Ends -->
+	<div class="h3subdiv">
+		<h3>Dead Ends</h3>
+		{% if dead_ends %}
+		{% for de, de_replies in dead_ends.items %}
+		{% if de.research_is_private == False or de.created_by == request.user %}		
+		<div class="content-section">
+		{% if de.active %}
+			{% if de.research_is_private %}
+			<span style="color:red;">P</span>
+			{% endif %}
+			<small>{{ de.created_by }} asked on {{ de.created }}</small><br><hr class="researchHr">
+			<p class="inlbl">
+				<b>{{ de.title }}</b>
+			</p>
+			<p class="inlbr">
+				<small>
+				 	<a id="de_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('de_div_{{ forloop.counter0 }}')">
+				 		show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>
+			</p>
+			<div class="initHide" id="de_div_{{ forloop.counter0 }}">
+				<p>{{ de.content }}</p>
+			</div>
+			<ul class="list-group">
+				{% for reply in de_replies %}
+				<li class="list-group-item">
+					<small>{{ reply.created_by }} replied on {{ reply.created }}</small><br><hr class="researchHr">
+					{{ reply.content }}
+					<p></p>
+				</li>
+				{% endfor %}
+			</ul>
+			<!-- reply form -->
+			<p class="right"><small><a href="javascript:showHideReplies('de_reply_form_{{ forloop.counter0 }}')">Reply</a></small></p>
+			<div class="initHide" id="de_reply_form_{{ forloop.counter0 }}">
+				<form method='POST'>
+					{% csrf_token %}
+					<fieldset class="form-group">
+						{{ replyform|crispy }}
+						<input type="hidden" name="OP" value="{{ de.id }}">
+					</fieldset>
+					<button type="reset" onclick="javascript:showHideReplies('de_reply_form_{{ forloop.counter0 }}')">cancel</button>
+					<button name="replyf" type="submit">submit</button>
+				</form>
+			</div>
+		{% else %}
+			<small class="text-muted">{{ de.title }} (<i>inactive</i>)</small>
+		{% endif %}
+		</div>
+		{% endif %}
+		{% endfor %}
+		{% else %}
+			<p><i>No Dead Ends have been defined yet.</i></p>
+		{% endif %}
+	</div>
+
+	<script type="text/javascript" src="{% static 'person-view.js' %}"></script>
+{% endblock %}

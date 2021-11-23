@@ -1,0 +1,31 @@
+{% extends 'public/base.html' %}
+
+
+
+
+{% block content %}
+	<div class="col-lg-4 col-md-12">
+		<div id="people-sidebar" class="content-section">
+			<h3><u>Existing Nuggets</u> <a href="{% url 'nugget-add' %}" title="Add a Nugget.">+</a></h3>
+			<div id="people-sidebar-inner" class="inner-content-section">
+				<ul class="list-group">
+				{% for nug in BINs %}
+				{% if nug.nugget_is_private == False or nug.created_by == request.user %}
+				<a class="sidebar-list-item" href="{% url 'nugget-details' nugget_id=nug.id %}">
+					<li class="list-group-item">
+						{% if nug.nugget_is_private %}
+						<span class="red">P</span>
+						{% endif %}
+						{{ nug }}
+					</li>
+				</a>
+				{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-8 col-md-12">
+		{% block innercontent %}{% endblock %}
+	</div>
+{% endblock %}
