@@ -532,17 +532,7 @@ def source_details(request, source_id):
 		'sources': sources 
 	}
 	srcobj = Source.objects.get(id=source_id)
-	context['trgtsrc_title'] = srcobj.source_title
-	context['trgtsrc_createdDB'] = srcobj.created_in_DB
-	context['trgtsrc_createdDBby'] = srcobj.created_in_DB_by_user
-	context['trgtsrc_type'] = srcobj.source_type
-	context['trgtsrc_creator'] = srcobj.source_creator
-	context['trgtsrc_DOC'] = srcobj.source_date_of_creation
-	context['trgtsrc_DOCapprox'] = srcobj.source_DOC_approximate
-	context['trgtsrc_description'] = srcobj.source_description
-	context['trgtsrc_biblio'] = srcobj.source_bibliographic_reference
-	context['trgtsrc_file'] = srcobj.source_file
-	context['trgtsrc_priv'] = srcobj.src_is_private
+	context['trgtsrcobj'] = srcobj
 
 	if request.method == 'POST':
 	#	print(request.POST)

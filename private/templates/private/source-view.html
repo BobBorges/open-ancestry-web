@@ -3,19 +3,19 @@
 {% load crispy_forms_tags %}
 
 {% block innercontent %}
-	<h1>{{ trgtsrc_title }}</h1>
+	<h1>{{ trgtsrcobj.source_title }}</h1>
 	<p class="text-muted">
 		<span class="inlbl">
 			&nbsp;&nbsp;Created
-			{% if trgtsrc_DOC %}
-			{% if trgtsrc_DOCapprox %}c.a.{% endif %}
-			{{ trgtsrc_DOC}}
+			{% if trgtsrcobj.source_date_of_createion %}
+			{% if trgtsrcobj.source_DOC_approximate %}c.a.{% endif %}
+			{{ trgtsrcobj.source_date_of_creation }}
 			{% else %}
 			<i>unknown date</i> 
 			{% endif %}
 			by
-			{% if trgtsrc_creator %}
-			{{ trgtsrc_creator }}
+			{% if trgtsrcobj.source_creator %}
+			{{ trgtsrcobj.source_creator }}
 			{% else %}
 			<i>unknown creator</i>
 			{% endif %}.
@@ -38,36 +38,35 @@
 		</form>
 	</div>
 
-	<p>Type: {{ trgtsrc_type }}</p>
+	<p>Type: {{ trgtsrcobj.source_type }}</p>
 	<h2>Description</h2>
 	<p>
-		{% if trgtsrc_description %}
-		{{ trgtsrc_description }}
+		{% if trgtsrcobj.source_description %}
+		{{ trgtsrcobj.source_description }}
 		{% else %}
 		<i>no description of this source provided</i>
 		{% endif %}
 	</p>
 	<h2>Full Reference</h2>
 	<p>
-		{% if trgtsrc_biblio%}
-		{{ trgtsrc_biblio }}
+		{% if trgtsrcobj.source_bibliographic_reference %}
+		{{ trgtsrcobj.source_bibliographic_reference }}
 		{% else %}
 		<i>no bibliographic reference of this source provided</i>
 		{% endif %}
 	</p>
 	<h2>Preview</h2>
 	<div id="img-preview-div">
-		<a target="_blank" href="/media/{{ trgtsrc_file }}">
-			<img id="img-preview" src="/media/{{ trgtsrc_file }}" title="If your browser supports previews of the file type, it will appear here." alt="Click download to save and view offline.">
+		<a target="_blank" href="/media/{{ trgtsrcobj.source_file }}">
+			<img id="img-preview" src="/media/{{ trgtsrcobj.source_file }}" title="If your browser supports previews of the file type, it will appear here." alt="Click download to save and view offline.">
 		</a>
-
 	</div>
 	<br>
-	<a href="/media/{{ trgtsrc_file }}" download><button>download</button></a>
+	<a href="/media/{{ trgtsrcobj.source_file }}" download><button>download</button></a>
 	<hr>
 	<p>
 		<small class="text-muted">
-			Source added to database on {{ trgtsrc_createdDB }} by user {{ trgtsrc_createdDBby }}.		
+			Source added to database on {{ trgtsrcobj.created_in_DB }} by user {{ trgtsrcobj.created_in_DB_by_user }}.		
 		</small>
 	</p>
 	<script type="text/javascript" src="{% static 'person-view.js' %}"></script>

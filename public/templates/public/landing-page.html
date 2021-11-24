@@ -12,7 +12,30 @@
 		<p>Get a copy of Open Ancestry Web from <a href="https://github.com/BobBorges/open-ancestry-web">Github</a> and run it on your own webserver.</p>
 
 
-		<h3>Quick Start</h3>
+		<h3>Quick Start (users)</h3>
+
+		<p>Open Ancestry Web is designed to be simple to use. Here's a quick exampele of how you might enter a nuclear family to get you started.</p>
+
+		<p>First add a couple of people after logging in by clicking 'People' from the navigation menu at the top of the site, then 'Add a Person'. Enter <i>John Smith</i> in the 'Name'/'Surname' fields, select male in the 'sex' field. Leave everything else blank, since John isn't living anymore and we don't have any sources anymore (we will add sources later). Do the same for 'Jane Smith' (but select 'female' instead).</p>
+
+
+		<p>Now you should be on Jane's person page with no information about her except the little sex icon. We have some primary sources about John and Jane that we want to have connected to our research database; both thier birth certificates, wedding certificate, Johns obituary and a picture of Jane's headstone. Click 'Sources' from the navigation menu, then 'Add a Source'. Add information about each of these sources and upload the files along with the information. Use a concise, but descriptive title and a brief description of each Source you add. In the case when the author of a document or photographer of a picture is known, add this information in the 'source creator' field. Similarly the 'date of creation' field should refer to the date when a Source was created / published (not the day you're uploading it to the database).</p>
+
+		<p>Let's now add birth events for John and Jane – navigate to 'People' and click 'Smith, John' from the list of people. Scroll down to 'Events' and click the little plus sign. Add a concise descriptive title like "Birth: John Smith", select 'birth' from event type, fill out whatever other information you know (from the birth certificate) re date, place, description, select 'Smith, John' from the "Event people" list and select John's birth certificate from the Sources list. Do the same for Jane.</p>
+
+		<p>Now let's define Jane and John's marriage. From John or Jane's page, scroll down to events and click the plus to add a new event. This time, define an event for their marriage (select 'marriage' from the event type field) and select them both in the event people list, and their wedding cerificate in the Sources Field. Creating a marriage event, also automatically creates a 'spouse of' Relationship for Jane and John, as well as a marriage Epoch. The marriage Epoch and Relationship can be ended manually or by defining a 'divorce' or 'death' Event. Now on both John and Jane's pages, it should show their marriage event, their Relationship and a Marriage Epoch.</p>
+
+		<p>Similarly, you can create death events for each of them, wich will automatically terminate their marriage Epoch at the date of the first one's death. Later on, we find a portrait of Jane – it doesn't pertain to any specific event, but we want to add it to her page as a source, so if we first add it as a Source, then go to Janes page and click the Edit icon after her name, there we can select our newly added source in the Sources List. We can also select this source in the "headshot" field – then when we navigate to Jane's page we will see her portrait in the top right corner.</p>
+
+		<p>John and Jane had a son, Jimmy. Add Jimmy as a person, but Jimmy is still alive, so select the little tickbox next to Living. We have Jimmy's birth certificate too, but since he's alive, when adding it as a source, select 'src is private' so that other users of the site won't be able to see it. You can select this as a Source when defining Jimmy's birth event and Relationship with his parent's, but only you will be able to see it (Your site admin should decide on a policy how to make private sources available to other users of the site, for instance after the person they pertain to dies, or whatever). </p>
+
+		<p>From Jimmy's page, click the little plus next to relationships. Make a relationship where Jimmy Smith is the child of John Smith. You will note that this creates two relationships in the database, that Jimmy is the child of John and John is the parent of Jimmy. All relationships in the site are bidirectional in this way. To see it in action, now at another relationship Jane Smith is the parent of Jimmy Smith. Now you've manually entered two relationships, but created four in the database – if you navigate to any of their pages, you should see Jane, John and Jimmy's relationships to eachother.</p>
+
+		<p>To summarize: Add people. Add Sources. From these, you can create and define relationdships, life events, and more... to collaboratively build the story of your family.</p>
+
+
+
+		<h3>Quick Start (hosts)</h3>
 		<p>
 			<ol>
 				<li>Clone the <a href="https://github.com/BobBorges/open-ancestry-web">Github Repo</a>.</li>

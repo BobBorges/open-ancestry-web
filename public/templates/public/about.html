@@ -16,6 +16,12 @@
 		<p>The documentation sucks atm, but this will change to some extent. For now, you have to learn by doing/exploring...</p>
 
 
+		<h2>FAQ</h2>
+		<ul>
+			<li>Why can't I add|edit sibling and half-sibling relationships?
+				<p>Sibling and half-sibling relationships are <i>implicit</i>; they are deduced from the parent-child relationships in the the database. When to individuals share parents they are considered siblings, or half-siblings when they have only one common parent.</p>
+			</li>
+		</ul>
 
 		<hr>
 		<br><br>
@@ -50,7 +56,7 @@
 				<li>The titles of private sources are visible to all authenticated users when adding|editing database model instances, Person, Event, Epoch, Relationship etc. The other information attributes are not visible in the site for users who are not supposed to have access to that sourcec</li>
 				<li>If the raw URL of a source is known, the file can be viewed by anyone.</li>
 			</ul>
-		I'm working to fix this, but don't put any <i>really</i> sensitive information (SSNs or financial information about living people) in an Open Ancestry Web instance until these issues are fixed.
+		I'm working to fix this, but don't put any <i>really</i> sensitive information (SSNs or financial information about living people) in an Open Ancestry Web instance until these issues are fixed. The site hasn't been fully tested, but this seems to only affect Sources (i.e. private Events, Epochs, Relationships, etc. are actually hidden from Users who aren't supposed to see them.)
 		</p>
 
 
@@ -58,9 +64,6 @@
 		<h4>Relationships</h4>
 
 		<p>Relationships are inherantly bidirectional; that is if (a) X is the parent of Y, then (b) Y must be the child of X. When creating|editing relationship (a) in the UI, the relevant inverse relationship (b) is also created|editing.</p>
-
-
-
 
 	</div>
 	<div class="col-lg-1 col-md-12"></div>
