@@ -11,26 +11,23 @@ with open(f'{BASE_DIR}/ancestry_web/secret_key.txt', 'r') as secret_key:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'robdborges-ancestry.sytes.net']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    # My apps
     'public.apps.PublicConfig',
     'private.apps.PrivateConfig',
     'authentication.apps.AuthenticationConfig',
-    # Django stuff
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # packages
     'crispy_forms',
-    'reversion'
+    'reversion',
 ]
 
 MIDDLEWARE = [
@@ -125,7 +122,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 
 LOGIN_REDIRECT_URL = 'user-in-database'
 LOGIN_URL = 'login'

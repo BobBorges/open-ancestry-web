@@ -1,23 +1,23 @@
 #!/bin/bash
 
 # Generate Environment
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~|~"
-echo " | Generating python venv |"
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~|~"
-python3 -m venv ancestryENV
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#echo " | Generating python venv |"
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#python3 -m venv ancestryENV
 
 # Activate Environment
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
-echo " | ...activating environment |"
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
-source ancestryENV/bin/activate
-python -m ensurepip --upgrade
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#echo " | ...activating environment |"
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#source ancestryENV/bin/activate
+#python -m ensurepip --upgrade
 
 # install dependencies
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~|~"
-echo " | Installing dependencies |"
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~|~"
-pip install -r requirements.txt
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#echo " | Installing dependencies |"
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#pip install -r requirements.txt
 
 # Secret Key
 echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"

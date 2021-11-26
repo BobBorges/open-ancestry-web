@@ -1,16 +1,15 @@
-"""
-WSGI config for ancestry_web project.
+import sys, os
 
-It exposes the WSGI callable as a module-level variable named ``application``.
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append('/mnt/RAID_34/open-ancestry-web')
+sys.path.append('/mnt/RAID_34/open-ancestry-web/ancestry_web')
+sys.path.append('/mnt/RAID_34/open-ancestry-web/ancestry_web/ancestry_web')
 
-For more information on this file, see
-https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
-"""
 
-import os
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'ancestry_web.settings'
 
 from django.core.wsgi import get_wsgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ancestry_web.settings')
-
 application = get_wsgi_application()
+
+
