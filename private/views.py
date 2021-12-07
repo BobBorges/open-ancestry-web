@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
@@ -7,11 +8,7 @@ from django.shortcuts import render, redirect
 from functools import reduce
 from .forms import ReplyForm, ResearchForm, PersonEditForm, CreatePersonForm, CreateSourceForm, SourceEditForm, EventEditFormA, EventEditFormB, CreateEventForm, CreateEpochForm, EditEpochForm, CreateNuggetForm, EditNuggetForm, CreateRelationshipForm, EditRelationshipForm, CreateAlternativeNameForm, EditAlternativeNameForm
 from .models import Person, Event, AlternativeName, Relationship, Epoch, BiographicalInfoNugget, Research, ResearchReply, Source
-
-
-
-
-
+import os
 
 
 @login_required
@@ -556,7 +553,9 @@ def source_details(request, source_id):
 		context['sourceeditform'] = sourceeditform
 
 	return render(request, 'private/source-view.html', context)
-
+	#response['Content-Type'] = ''
+	#response['x-Sendfile'] = os.path.join(settings.MEDIA_PRIV, srcobj.source_file.name)
+	#return response
 
 
 @login_required
