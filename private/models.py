@@ -1,10 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-import os
-
-
-
-
+import os, string, random
 
 
 
@@ -20,7 +16,7 @@ class Source(models.Model):
 	created_in_DB = models.DateTimeField(auto_now_add=True)
 	created_in_DB_by_user = models.ForeignKey(User, on_delete=models.PROTECT)
 	source_type = models.CharField(max_length=255, choices=SOURCE_TYPE_OPTS)
-	source_file = models.FileField()
+	source_file = models.FileField(upload_to='priv/')
 	source_creator = models.CharField(max_length=510, blank=True)
 	source_date_of_creation = models.CharField(max_length=255, help_text=DATE_HELP, blank=True)
 	source_DOC_approximate = models.BooleanField()

@@ -504,8 +504,6 @@ def source_add(request):
 	if request.method == 'POST':
 		createsourceform = CreateSourceForm(request.POST, request.FILES)
 		context['createsourceform'] = createsourceform
-		print(request.POST)
-		print(request.FILES)
 		if createsourceform.is_valid():
 			sobj = createsourceform.save(commit=False)
 			sobj.created_in_DB_by_user = request.user
@@ -513,7 +511,7 @@ def source_add(request):
 			sid = sobj.id
 			return redirect('source-details', source_id=sid)
 		else:
-			print(createsourceform.errors)
+			print("ERROR private/views.py:", createsourceform.errors)
 	else:
 		createsourceform = CreateSourceForm()
 		context['createsourceform'] = createsourceform
