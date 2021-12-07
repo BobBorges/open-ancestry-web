@@ -1,8 +1,0 @@
-db.sqlite3
-ancestryENV/
-*.backup
-media/*
-!media/placeholder.txt
-**.pyc
-**__init__.py
-ancestry_web/secret_key.txt
