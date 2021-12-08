@@ -124,3 +124,7 @@ p {
 .alert-error {
   background: red;
 }
+
+.initHide{
+  display: none;
+}

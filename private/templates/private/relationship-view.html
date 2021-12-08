@@ -53,11 +53,76 @@
 
 	<h2>Sources</h2>
 	<p>
-		<ul>
-			{% for s in targetEP.sources.all %}
-			<li>{{ s }}</li>
-			{% endfor %}
-		</ul>
+
+		{% for s in targetREL.sources.all %}
+		{% if s.src_is_private == False or s.created_in_DB_by_user == request.user %}
+		<div class="content-section">
+			<P class="inlbl">
+				{% if s.src_is_private %}<span class="red">P</span>{% endif %}				
+				{{ s.source_type }}: <a href="{% url 'source-details' source_id=s.id %}">{{ s.source_title }}</a>
+			</P>
+			<p class="inlbr">
+				<small>
+					<a id="source_div_{{ forloop.counter0 }}_showerHider" href="javascript:showHideDeets('source_div_{{ forloop.counter0 }}')">
+						show details&nbsp;
+						<i class="fas fa-arrow-alt-circle-down" style=""></i>
+					</a>
+				</small>
+			</p>
+			<div class="initHide" id="source_div_{{ forloop.counter0 }}">
+				<hr class="researchHr">
+				
+				<p>
+					<b>Date created:</b>&nbsp;
+					{% if s.source_date_of_creation %}
+						{% if s.source_DOC_approximate %}c.a.{% endif %}
+						{{ s.source_date_of_creation }}
+					{% else %}
+						<small><i>undefined date</i></small>
+					
+					{% endif %}
+				</p>
+				
+				{% if s.source_creator %}
+				<p>
+					<b>Creator:</b>&nbsp;{{ s.source_creator }}
+				</p>
+				{% endif %}
+				
+				<p>
+					<b>Description</b><br>
+					{% if s.source_description  %}
+						{{ s.source_description }}
+					{% else %}
+						<small><i>No description</i></small>
+					{% endif %}
+				</p>
+
+				{% if s.source_bibliographic_reference %}
+				<p>
+					<b>Bibliographic Reference</b><br>
+					{{ s.source_bibliographic_reference|linebreaks }}
+				</p>
+				{% endif %}
+
+				<p><b>Preview</b></p>
+				<div id="img-preview-div">
+					<a target="_blank" href="/media/{{ s.source_file }}">
+						<img id="img-preview" src="/media/{{ s.source_file }}" title="If your browser supports previews of the file type, it will appear here." alt="Click download to save and view offline.">
+					</a>
+				</div>
+
+				<p class="right">Edit Source:&nbsp;
+					<a href="{% url 'source-details' source_id=s.id %}">
+						<i class="far fa-edit" style=""></i>
+					</a>
+				</p>
+				<hr class="researchHr">
+				<small class="text-muted">Entered in DB by {{ s.created_in_DB_by_user }} on {{ s.created_in_DB }}.</small>		
+			</div>
+		</div>
+		{% endif %}
+		{% endfor %}
 	</p>
 
 

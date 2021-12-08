@@ -1,0 +1,20 @@
+{% extends "public/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="content-section">
+            <h1>Register?</h1>
+            <p>There is purposly no self-registration form for this website.</p>
+            <p>Do you believe you are part of the family tree hosted on this instance of Open Ancestry Web? Send a mail to 
+                {% if host_email|length > 0 %}
+                {{ host_email }}
+                {% else %}
+                the instance host
+                {% endif %}
+            .</p>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+{% endblock content %}

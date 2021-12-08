@@ -20,17 +20,17 @@
 #pip install -r requirements.txt
 
 # Secret Key
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
-echo " | Generating Django Secret Key |"
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
-python generate_secretkey.py
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#echo " | Generating Django Secret Key |"
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
+#python generate_secretkey.py
 
 # Migrate DB
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~|~"
-echo " | Initializing Database |"
-echo "~|~~~~~~~~~~~~~~~~~~~~~~~|~"
-python manage.py makemigrations
-python manage.py migrate
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~|~"
+#echo " | Initializing Database |"
+#echo "~|~~~~~~~~~~~~~~~~~~~~~~~|~"
+#python manage.py makemigrations
+#python manage.py migrate
 
 echo "~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~"
 echo " | Initializing track changes in DB |"

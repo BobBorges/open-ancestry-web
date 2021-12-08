@@ -1,8 +1,10 @@
+from ancestry_web.instance_details import this_instance
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import UserIsPersonForm
 from .models import UserIsPerson
 
-# Create your views here.
+@login_required
 def I_am_Person(request):
 	context = {}
 
@@ -25,3 +27,9 @@ def I_am_Person(request):
 			context['userispersonform'] = userispersonform
 
 	return render(request, 'authentication/user-is-person.html', context)
+
+
+def register_view(request):
+	context = {}
+	context.update(this_instance)
+	return render(request, 'authentication/register.html', context)

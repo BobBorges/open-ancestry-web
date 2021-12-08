@@ -55,7 +55,13 @@
 						{% endif %}
 
 						{% if birth_event.sources.all|length > 0 %}
-						<p>Sources: {{ birth_event.sources.all }}</p>
+						<p>Sources: 
+							<ul class="list-group">
+							{% for bes in birth_event.sources.all %}
+							<a href="{% url 'source-details' source_id=bes.id %}"><li class="list-group-item">{{ bes }}</li></a>
+							{% endfor %}
+							</ul>
+						</p>
 						{% else %}
 						<p><small>There are no sources defined for this Event.</small></p>
 						{% endif %}
@@ -628,6 +634,11 @@
 					<hr class="researchHr"> 
 					{% if sp.sources.all|length > 0 %}
 					<p>Sources</p>
+					<ul class="list-group">
+						{% for s in sp.sources.all %}
+						<a href="{% url 'source-details' source_id=s.id %}"><li class="list-group-item">{{ s }}</li></a>
+						{% endfor %}
+					</ul>
 					{% else %}
 					<p><small>There are no Sources for this Relationship.</small></p>
 					{% endif %}
@@ -1056,8 +1067,8 @@
 
 				<p><b>Preview</b></p>
 				<div id="img-preview-div">
-					<a target="_blank" href="/pmedia/{{ source.source_file }}">
-						<img id="img-preview" src="/pmedia/{{ source.source_file }}" title="If your browser supports previews of the file type, it will appear here." alt="Click download to save and view offline.">
+					<a target="_blank" href="/media/{{ source.source_file }}">
+						<img id="img-preview" src="/media/{{ source.source_file }}" title="If your browser supports previews of the file type, it will appear here." alt="Click download to save and view offline.">
 					</a>
 				</div>
 
@@ -1067,7 +1078,7 @@
 					</a>
 				</p>
 				<hr class="researchHr">
-				<small class="text-muted">Entered in DB by {{ source.created_in_DB_by_user }} on {{ BIN.created_in_DB }}.</small>		
+				<small class="text-muted">Entered in DB by {{ source.created_in_DB_by_user }} on {{ source.created_in_DB }}.</small>		
 			</div>
 		</div>
 	{% endif %}
