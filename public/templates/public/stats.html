@@ -10,13 +10,14 @@
 
 		<p>
 			<ul>
-				<li>Number of Users: ##</li>
-				<li>Number of People in Database: ##</li>
-				<li>Number of Sources in Database: ##</li>
+				<li>Number of Users: {{ num_users }}</li>
+				<li>Number of People in Database: {{ num_people }}</li>
+				<li>Number of Sources in Database: {{ num_sources }}</li>
 				<li>Surnames in Database associated with more than three Person entries:
 					<ul>
-						<li>Surname 1 : #</li>
-						<li>Surname 2 : #</li>
+						{% for k, v in surnames.items %}
+						<li>{{ k }} : {{ v }} instances</li>
+						{% endfor %}
 					</ul>
 				</li>
 			</ul>

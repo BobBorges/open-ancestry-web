@@ -45,10 +45,10 @@
 	</p>
 
 	<p style="text-align:center;">
-		<b>{{ targetREL.principle }}</b><br>
+		<a href="{% url 'person-details' principle_id=targetREL.principle.id %}"><b>{{ targetREL.principle }}</b></a><br>
 		is the<br>
 		<b>{{ targetREL.relationship_type }}</b><br><br>
-		<b>{{ targetREL.referent }}</b>
+		<a href="{% url 'person-details' principle_id=targetREL.referent.id %}"><b>{{ targetREL.referent }}</b></a>
 	</p>
 
 	<h2>Sources</h2>

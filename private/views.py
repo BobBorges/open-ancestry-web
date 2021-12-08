@@ -232,7 +232,9 @@ def person_details(request, principle_id):
 					child_parents = Relationship.objects.filter(principle=child.referent_id, relationship_type='child of')
 					coparent = None
 					for child_parent in child_parents:
-						if principle_id != child_parent.referent_id:
+						print(f"~~~~~~~~~~~~~~~~> pid {principle_id} : parent_id {child_parent.referent_id}")
+						if int(principle_id) != int(child_parent.referent_id):
+							print(f"~~~~~~~~~~~~~~~>>> Coparent is {child_parent.referent_id}")
 							coparent = Person.objects.get(id=child_parent.referent_id)
 						else:
 							pass
@@ -636,12 +638,18 @@ def event_add(request):
 										relationship_type = 'spouse of',
 										referent = x
 									)
-									if not rel.start_date:
-										rel.start_date = newE.event_date
-										rel.start_date_approximate = newE.event_date_approximate
-									rel.sources.add(*[x.id for x in newE.sources])
+									try:
+										if not rel.start_date:
+											rel.start_date = newE.event_date
+											rel.start_date_approximate = newE.event_date_approximate
+									except:
+										pass
+									try:
+										rel.sources.add(*[x.id for x in newE.sources])
+									except:
+										pass
 									rel.save()
-									od[f'robj{idx}'] = rel.biderrel
+									od[f'robj{idx}'] = rel.bidirrel
 								except:
 									newR = Relationship.objects.create(
 										created_by = request.user,
@@ -666,15 +674,11 @@ def event_add(request):
 					O2.save()
 
 					IDs = [x.id for x in newEp]
-					#print('IDs', IDs)
 					epochs = Epoch.objects.annotate(count=Count('epoch_people')).filter(count=len(IDs))
-					#print('EPOCHS1', len(epochs), '::', epochs)
 					epochs = reduce(lambda p, id: epochs.filter(epoch_people=id), IDs, epochs)
-					#print('EPOCHS2', len(epochs), '::', epochs)
 					epochs = epochs.filter(epoch_type='marriage')
 					if 	len(epochs) > 0:
 						for epoch in epochs:
-					#		print(len(epochs), '>>>>>>', epoch)
 							if epoch.epoch_type == 'marriage':
 								if not epoch.start_date:
 									epoch.start_date = newE.event_date
@@ -684,7 +688,6 @@ def event_add(request):
 								epoch.save()
 
 					else:
-					#	print("creating epoch")
 						newPOCH_is_private = False
 						if newE.event_is_private:
 							newPOCH_is_private = True

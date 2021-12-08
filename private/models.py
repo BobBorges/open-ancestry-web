@@ -14,7 +14,7 @@ SOURCE_TYPE_OPTS = (
 class Source(models.Model):
 	source_title = models.CharField(max_length=510)
 	created_in_DB = models.DateTimeField(auto_now_add=True)
-	created_in_DB_by_user = models.ForeignKey(User, on_delete=models.PROTECT)
+	created_in_DB_by_user = models.ForeignKey(User, on_delete=models.CASCADE)
 	source_type = models.CharField(max_length=255, choices=SOURCE_TYPE_OPTS)
 	source_file = models.FileField(upload_to='priv/')
 	source_creator = models.CharField(max_length=510, blank=True)
@@ -36,7 +36,7 @@ SEX_OPTS = (
 )
 class Person(models.Model):
 	created = models.DateTimeField('created', auto_now_add=True)
-	created_by_user = models.ForeignKey(User, on_delete=models.PROTECT)
+	created_by_user = models.ForeignKey(User, on_delete=models.CASCADE)
 	given_name = models.CharField(max_length=255)
 	surname_at_birth = models.CharField(max_length=255)
 	sex = models.CharField(max_length=255, choices=SEX_OPTS)
@@ -44,7 +44,7 @@ class Person(models.Model):
 	headshot = models.ForeignKey(
 		Source, 
 		related_name='headhshot', 
-		on_delete=models.PROTECT, 
+		on_delete=models.CASCADE, 
 		blank=True, 
 		null=True
 	)
@@ -68,9 +68,9 @@ ALTERNATIVE_TYPES = (
 	('other', 'other')
 )
 class AlternativeName(models.Model):
-	principle = models.ForeignKey(Person, on_delete=models.PROTECT)
+	principle = models.ForeignKey(Person, on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)
-	created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	alternate_first = models.CharField(max_length=255, blank=True)
 	alternate_surname = models.CharField(max_length=255, blank=True)
 	alternative_type = models.CharField(max_length=255, choices=ALTERNATIVE_TYPES)
@@ -97,7 +97,7 @@ PLACE_HELP = "Indicate places from non-specifiic to specific as possible from le
 class Event(models.Model):
 	event_title = models.CharField(max_length=510)
 	created = models.DateTimeField(auto_now_add=True)
-	created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	event_type = models.CharField(max_length=255, choices=EVENT_TYPES)	
 	event_description = models.TextField(blank=True)
 	event_date = models.CharField(max_length=255, help_text=DATE_HELP, blank=True)
@@ -122,7 +122,7 @@ EPOCH_TYPES = (
 class Epoch(models.Model):
 	epoch_title = models.CharField(max_length=510)
 	created = models.DateTimeField(auto_now_add=True)
-	created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	epoch_type = models.CharField(max_length=255, choices=EPOCH_TYPES)
 	epoch_description = models.TextField(blank=True)
 	start_date = models.CharField(max_length=255, help_text=DATE_HELP, blank=True)
@@ -149,11 +149,11 @@ RELATIONSHIP_TYPES = (
 )
 RELATIONSHIP_DATE_HELP = "Biological relationships start on the birth day of the child – no end date is necessary. Date information for non-biological relationships should be entered based on a marriage / adoption event. And end date should be entered for 'spouse of' relatonships in the case of divorce, or for 'guardian/ward' relationships if/when there is a clear end to that relationship."
 class Relationship(models.Model):
-	principle = models.ForeignKey(Person, related_name='principle', on_delete=models.PROTECT)
+	principle = models.ForeignKey(Person, related_name='principle', on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)
-	created_by = models.ForeignKey(User, on_delete=models.PROTECT)		
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	relationship_type = models.CharField(max_length=255, choices=RELATIONSHIP_TYPES)
-	referent = models.ForeignKey(Person, related_name='referent', on_delete=models.PROTECT)
+	referent = models.ForeignKey(Person, related_name='referent', on_delete=models.CASCADE)
 	start_date = models.CharField(
 		max_length=255, 
 		help_text=f'{DATE_HELP} {RELATIONSHIP_DATE_HELP}', 
@@ -166,7 +166,7 @@ class Relationship(models.Model):
 	 	blank=True
  	)
 	end_date_approximate = models.BooleanField()
-	bidirrel = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
+	bidirrel = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
 	sources = models.ManyToManyField(Source, blank=True)
 	relationship_is_private = models.BooleanField()
 
@@ -182,7 +182,7 @@ class BiographicalInfoNugget(models.Model):
 	end_date = models.CharField(max_length=255, help_text=DATE_HELP, blank=True)
 	end_date_approximate = models.BooleanField()
 	created = models.DateTimeField(auto_now_add=True)
-	created_by = models.ForeignKey(User, on_delete=models.PROTECT)	
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE)	
 	people = models.ManyToManyField(Person)
 	sources = models.ManyToManyField(Source, blank=True)
 	nugget_is_private = models.BooleanField()
@@ -201,10 +201,10 @@ RESEARCH_TYPES = (
 class Research(models.Model):
 	title = models.CharField(max_length=510)
 	item_type = models.CharField(max_length=255, choices=RESEARCH_TYPES)
-	principle = models.ForeignKey(Person, on_delete=models.PROTECT)
+	principle = models.ForeignKey(Person, on_delete=models.CASCADE)
 	content = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)
-	created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	research_is_private = models.BooleanField()
 	active = models.BooleanField()
 	
@@ -214,7 +214,7 @@ class Research(models.Model):
 
 
 class ResearchReply(models.Model):
-	reply_to = models.ForeignKey(Research, on_delete=models.PROTECT)
+	reply_to = models.ForeignKey(Research, on_delete=models.CASCADE)
 	created = models.DateTimeField(auto_now_add=True)
-	created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+	created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 	content = models.TextField()

@@ -25,7 +25,7 @@
 
 		<hr>
 		<br><br>
-		<h3>|--> Backend: Database Structure <--|</h3>
+		<h3>~~~|--> Backend: Database Structure <--|~~~</h3>
 
 		<p>Database structure...</p>
 
@@ -42,29 +42,64 @@
 		<p>Definable relationships are biological or affinal. That is, they are based on births ("parent / child of") or marriages ("spouse of"). A third type ("guardian / ward of") is also defined. Other types of culturally relevant relationships ("siblings, cousins, inlaws, etc") are not explicitly defined, but can be deduced by those definable relationships.</p>
 
 		<br><br>
-		<h3>|--> Frontend: General How-to <--|</h3>
+		<h3>~~~|--> Frontend: General How-to <--|~~~</h3>
 
 		<p>Using the site...</p>
+		<p>There are two central and logically independent aspects of the data structure: Person instances and Source instances. Person instances represent individual people in the family, while Source instances represent pieces of evidence in the research of family history. Person and Source instances are added to the site independently of other parts of the data structure, while other parts of the data structure require Person instances (and to a lesser extent Source instances) to already be present in the data upon creation.</p>
+
+		<br>
+		<h4>People</h4>
+		<p>One central component of the site's data structure is the Person. Indivifuals are the root of all relations in the data structure – this means that a person must be defined <i>before</i> any events, epochs, relationsh, etc. can be defined.
+			<ul>Fields for a Person Instance
+				<li>Given name : A person's given at birth *</li>
+				<li>Surname at birth : A person's surname at birth *</li>
+				<li>Sex : A person's biological sex at birth (the site does not handle sex reassignment, nor is social gender considered.</li>
+				<li>Living : A true|false value for whether a person is currently alive</li>
+				<li>Headshot : A Source instance which functions as a sort of 'profile picture' when viewing the Person instance for a given individual</li>
+				<li>Sources : This is a field to attach miscellaneous sources to a Person instance. An ideal usecase for this field are photos or paintings of individuals. It is preferred to attach sources relating to specific events (e.g. a birth certificate) to those events (e.g. a birth Event instance) rather than lumping all sources pertaining to the Person instance here.</li>
+			</ul>
+		<small>* Alternative names can be defined for a Person. Nicknames, and legal name changes are supported.</small>
+		</p>
+
+
+		<br>
+		<h4>Sources</h4>
+		<p>Source instances represent pieces of evidence in the research of family history. These can be Primary Pources (birth certificates, census records, etc.), Secondary Sources (e.g. a biographical sketch of an individual that itself was constructed from Primary Sources), or images (photographs, paintings etc) of family members.</p>
+
+		<p>As a general rule of thumb, there should be a source for every piece of information added – this is <b><i>especially</i></b> true of non-living relatives and ancestors of yore. It may be strange to need to verify your own, or your child's birthdate (particularly if we don't want to upload sensitive document), but it's always good to verify information when possible.</p>
+
+		
+		<br>
+		<h4>Alternative Names</h4>
+		<p>...self explanatory? add alternative names (nicknames or legal name changes), attach to a person instance</p>
+
+
+		<br>
+		<h4>Relationships</h4>
+		<p>Relationships are inherantly bidirectional; that is (a) if X is the parent of Y, then (b) Y must be the child of X. When creating|editing relationship (a) in the UI, the relevant inverse relationship (b) is also created|edited.
+			<ul>Types of relationships:
+				<li>X is "child of" Y :: Y is "parent of" X</li>
+				<li>X is "ward of" Y :: Y is "guardian of X</li>
+				<li>X is "spouse of" Y :: Y is "spouse of" X</li>
+			</ul>
+		</p>
+
+		<br>
+		<h4>Events and Epochs</h4>
+		<p>Similarly, certain Events also trigger relationships. For instance, if a Marriage Event is created, the two people indicated in the event form become each others' spouses. Epochs are also created like this; a Marriage Event creates a Marriage Epoch, which ends with a Divorce Event or the Death Event of one of the sposes. While some shortcuts like this are included for convenience, all Events, Epochs, and Relationships can be created|edited manually for maximum flexibility.</p>
 
 		<br>
 		<h4>Private items</h4>
-
 		<p>When creating certain types of database entries, the user has an option to mark the entry as <i>private</i>. In theory, this means only that user will be able to view|edit that entry.</p>
 
 		<p>There are known issues with this feature right now. 
 			<ul>for instance:
 				<li>The titles of private sources are visible to all authenticated users when adding|editing database model instances, Person, Event, Epoch, Relationship etc. The other information attributes are not visible in the site for users who are not supposed to have access to that sourcec</li>
-				<li>If the raw URL of a source is known, the file can be viewed by anyone.</li>
 			</ul>
-		I'm working to fix this, but don't put any <i>really</i> sensitive information (SSNs or financial information about living people) in an Open Ancestry Web instance until these issues are fixed. The site hasn't been fully tested, but this seems to only affect Sources (i.e. private Events, Epochs, Relationships, etc. are actually hidden from Users who aren't supposed to see them.)
+		The site hasn't been fully tested, but this seems to only affect Sources (i.e. private Events, Epochs, Relationships, etc. are actually hidden from Users who aren't supposed to see them.) I'm working to fix this. But more generally, I think it would be reasonable not to put any <i>really</i> sensitive information (SSNs or financial information about living people) in an Open Ancestry Web instance until the security has been more thoroughly tested. 
 		</p>
 
-
-		<br>
-		<h4>Relationships</h4>
-
-		<p>Relationships are inherantly bidirectional; that is if (a) X is the parent of Y, then (b) Y must be the child of X. When creating|editing relationship (a) in the UI, the relevant inverse relationship (b) is also created|editing.</p>
-
+		<p><b>Privacy policy:</b> Every host should declare how private sources are handled at the outset of a new instance of Open Ancestry Web, so that all users know what happens to their 'private' sources once they pass away. Ideally the policy should be known and available on the site for its users. I imagine something like "private sources become public when (a) an uploader dies AND (b), if possible, their next of kin are notified and agree AND (c) the host / admin(s) of the site determine that the information will not harm the rest of the family and/or other individuals.</p>
 	</div>
 	<div class="col-lg-1 col-md-12"></div>
 
